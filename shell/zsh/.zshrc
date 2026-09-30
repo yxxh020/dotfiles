@@ -66,3 +66,9 @@ alias gpl="git pull"
 alias glg="git log --stat"
 alias glo="git log --oneline --decorate"
 alias c="clear"
+
+# ------------------------------------------------------------------------------
+# 6. Container Aliases (Docker -> Podman Drop-in Replacement)
+# ------------------------------------------------------------------------------
+alias docker="podman"
+alias docker-compose="podman compose"
