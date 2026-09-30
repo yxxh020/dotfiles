@@ -3,14 +3,20 @@
 # ==============================================================================
 
 # 1. Path & Environment Variables
-export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$HOME/.local/bin:$HOME/bin:/opt/homebrew/bin:$PATH"
+if [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x "/usr/local/bin/brew" ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$HOME/.local/bin:$HOME/bin:$PATH"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="code --wait"
 
 # 2. Node.js (fnm) Init
 if command -v fnm &>/dev/null; then
-  eval "$(fnm env --use-on-cd)"
+  eval "$(fnm env --use-on-cd --shell zsh)"
 fi
 
 # 3. Oh My Posh / Starship Prompt (선택)

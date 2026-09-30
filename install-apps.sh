@@ -11,13 +11,22 @@ echo "========================================"
 echo "  🍏 macOS 개발 환경 자동 설치 시작"
 echo "========================================"
 
+# Homebrew 환경변수 로드 (Apple Silicon & Intel)
+if [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x "/usr/local/bin/brew" ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # ---------- [1/6] Homebrew ----------
 echo ""
 echo "🍺 [1/6] Homebrew 설치 확인..."
 if ! command -v brew &>/dev/null; then
   echo "Homebrew가 없어 설치를 시작합니다..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  if [ -x "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
 else
   echo "✅ Homebrew가 이미 설치되어 있습니다."
 fi
@@ -32,10 +41,12 @@ brew bundle --file="$DOTFILES_DIR/Brewfile"
 # ---------- [3/6] Node.js & 패키지 매니저 ----------
 echo ""
 echo "⚡ [3/6] Node.js LTS 및 글로벌 패키지 매니저(pnpm, bun) 설치..."
-eval "$(fnm env --use-on-cd 2>/dev/null || true)"
-fnm install --lts
-fnm default lts-latest
-npm install -g pnpm bun
+if command -v fnm &>/dev/null; then
+  fnm install --lts
+  fnm default lts-latest
+  eval "$(fnm env --use-on-cd --shell bash)"
+  npm install -g pnpm bun || true
+fi
 
 # ---------- [4/6] AI 코딩 에이전트 & IDE ----------
 echo ""
