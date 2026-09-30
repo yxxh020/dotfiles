@@ -8,23 +8,32 @@
 
 [credential "https://github.com"]
 	helper = 
-	helper = !gh auth git-credential
+	helper = "!f() { test \"$1\" = get || exit 0; u=\"\"; case \"$PWD/\" in *personal*|*Personal*|*dotfiles*) u=\"yxxh020\" ;; *orca*|*Orca*) u=\"YiranHwang\" ;; esac; if [ -n \"$u\" ]; then echo \"username=$u\"; echo \"password=$(gh auth token --user $u)\"; else gh auth git-credential get; fi; }; f"
 
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !gh auth git-credential
+	helper = "!f() { test \"$1\" = get || exit 0; u=\"\"; case \"$PWD/\" in *personal*|*Personal*|*dotfiles*) u=\"yxxh020\" ;; *orca*|*Orca*) u=\"YiranHwang\" ;; esac; if [ -n \"$u\" ]; then echo \"username=$u\"; echo \"password=$(gh auth token --user $u)\"; else gh auth git-credential get; fi; }; f"
 
 # -------------------------------------------------------------
 # 다중 계정 디렉토리별 자동 분기 (macOS / Linux / Windows 호환)
 # -------------------------------------------------------------
-# 개인 프로젝트 (yxxh020)
+# 개인 프로젝트 및 Dotfiles (yxxh020)
 [includeIf "gitdir:~/personal/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir:~/dotfiles/"]
 	path = ~/.gitconfig-personal
 
 [includeIf "gitdir/i:C:/Users/user/personal/"]
 	path = ~/.gitconfig-personal
 
 [includeIf "gitdir/i:C:/personal/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir/i:C:/Users/user/dotfiles/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir/i:C:/dotfiles/"]
 	path = ~/.gitconfig-personal
 
 # 회사 프로젝트 (YiranHwang)

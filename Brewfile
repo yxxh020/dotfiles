@@ -29,7 +29,6 @@ cask "podman-desktop"   # Podman GUI 대시보드
 # 4. 코드 에디터 및 AI 도구
 # ------------------------------------------------------------------------------
 cask "visual-studio-code"
-cask "antigravity-ide"    # Google Antigravity 공식 GUI IDE
 brew "antigravity-cli"    # Google Antigravity CLI (명령어: agy)
 tap "stablyai/orca"
 cask "orca"
@@ -38,12 +37,20 @@ cask "orca"
 # 5. 보안 및 비밀번호 관리
 # ------------------------------------------------------------------------------
 cask "keepassxc"        # 팀/개인 비밀번호 금고 및 시크릿 관리
+brew "rclone"           # 클라우드 스토리지(Google Drive) 동기화 도구
 
 # ------------------------------------------------------------------------------
 # 6. 터미널 및 셸 생산성
 # ------------------------------------------------------------------------------
 cask "ghostty"          # 최신 고속 GPU 가속 터미널 (또는 iTerm2)
-brew "oh-my-posh"       # 터미널 프롬프트 테마 엔진
+brew "eza"              # 아이콘 및 Git 상태를 지원하는 차세대 ls
+brew "zoxide"           # 스마트 디렉토리 이동 (cd 대체 'z')
+brew "fzf"              # 고속 대화형 퍼지 검색기
+brew "fd"               # find 대체 고속 파일 탐색기
+brew "bat"              # 구문 강조 지원 cat 대체 유틸리티
+brew "tmux"             # 터미널 멀티플렉서
+cask "font-meslo-lg-nerd-font" # Oh My Posh 권장 Nerd Font (기호/아이콘 지원)
+cask "font-d2coding-nerd-font" # D2Coding 한글/영문 고정폭 Nerd Font
 
 # ------------------------------------------------------------------------------
 # 7. 데이터베이스 도구 (SSMS Mac 대체)
