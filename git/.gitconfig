@@ -1,0 +1,38 @@
+[core]
+	autocrlf = input
+	quotepath = false
+	editor = code --wait
+
+[init]
+	defaultBranch = main
+
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential
+
+# -------------------------------------------------------------
+# 다중 계정 디렉토리별 자동 분기 (macOS / Linux / Windows 호환)
+# -------------------------------------------------------------
+# 개인 프로젝트 (yxxh020)
+[includeIf "gitdir:~/personal/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir/i:C:/Users/user/personal/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir/i:C:/personal/"]
+	path = ~/.gitconfig-personal
+
+# 회사 프로젝트 (YiranHwang)
+[includeIf "gitdir:~/orca/"]
+	path = ~/.gitconfig-orca
+
+[includeIf "gitdir/i:C:/Users/user/orca/"]
+	path = ~/.gitconfig-orca
+
+[includeIf "gitdir/i:C:/orca/"]
+	path = ~/.gitconfig-orca

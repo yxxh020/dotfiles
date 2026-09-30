@@ -1,0 +1,27 @@
+# Security: Ignore all sensitive secrets and keys
+*.kdbx
+*.rdg
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+known_hosts
+authorized_keys
+
+# Environment and tokens
+.env
+.env.*
+!.env.example
+*.token
+
+# OS and Editor artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.bak
+*~
+
+# Dependencies
+node_modules/
+.venv/
