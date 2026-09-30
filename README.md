@@ -1,4 +1,4 @@
-# 🛠️ yxxh020 Dotfiles
+# 🛠️ Dotfiles
 
 macOS 및 Windows 환경에서 일관된 개발 경험을 제공하기 위한 개인 Dotfiles 저장소입니다.
 
