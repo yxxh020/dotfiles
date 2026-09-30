@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # macOS Complete App & Tool Installer (install-apps.sh)
+# 새 맥북에서 이 스크립트 하나로 모든 필수 도구가 설치됩니다.
 # ==============================================================================
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "🍺 [1/5] Homebrew 설치 확인 및 설치..."
+echo "========================================"
+echo "  🍏 macOS 개발 환경 자동 설치 시작"
+echo "========================================"
+
+# ---------- [1/6] Homebrew ----------
+echo ""
+echo "🍺 [1/6] Homebrew 설치 확인..."
 if ! command -v brew &>/dev/null; then
   echo "Homebrew가 없어 설치를 시작합니다..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -15,27 +22,36 @@ else
   echo "✅ Homebrew가 이미 설치되어 있습니다."
 fi
 
-echo "📦 [2/5] Brewfile 기반 필수 애플리케이션 및 CLI 일괄 설치..."
-# VS Code, Docker, KeePassXC, Azure Data Studio(SSMS 대체), DBeaver, Ghostty 등
+# ---------- [2/6] Brewfile 기반 일괄 설치 ----------
+echo ""
+echo "📦 [2/6] Brewfile 기반 도구 및 앱 일괄 설치..."
+echo "   (Git, gh, VS Code, Docker, Podman, KeePassXC, Ghostty,"
+echo "    Azure Data Studio, DBeaver, Obsidian, AltTab, Rectangle, Raycast...)"
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
-echo "⚡ [3/5] Node.js LTS 및 글로벌 패키지 매니저(pnpm, bun) 설치..."
+# ---------- [3/6] Node.js & 패키지 매니저 ----------
+echo ""
+echo "⚡ [3/6] Node.js LTS 및 글로벌 패키지 매니저(pnpm, bun) 설치..."
 eval "$(fnm env --use-on-cd 2>/dev/null || true)"
 fnm install --lts
 fnm default lts-latest
 npm install -g pnpm bun
 
-echo "🤖 [4/5] AI 도구 설치..."
-# 1) Antigravity CLI 설치 (공식 curl 인스톨러 사용 시)
+# ---------- [4/6] AI 코딩 에이전트 ----------
+echo ""
+echo "🤖 [4/6] AI 코딩 에이전트 설치..."
+# Antigravity CLI
 if ! command -v agy &>/dev/null; then
   echo "Antigravity CLI 설치 중..."
   curl -fsSL https://antigravity.google/install.sh 2>/dev/null | bash || true
 fi
 
-# 2) Orca 데스크톱 다운로드 안내
-echo "ℹ️ Orca 데스크톱은 https://onorca.dev 에서 macOS(Apple Silicon/Intel) 버전을 다운로드할 수 있습니다."
+# Orca 데스크톱 안내
+echo "ℹ️  Orca 데스크톱 → https://onorca.dev 에서 macOS(Apple Silicon/Intel) 버전 다운로드"
 
-echo "🐳 [5/5] Podman 컨테이너 머신 초기화..."
+# ---------- [5/6] Podman 컨테이너 머신 초기화 ----------
+echo ""
+echo "🐳 [5/6] Podman 컨테이너 머신 초기화..."
 if command -v podman &>/dev/null; then
   if ! podman machine list --noheading 2>/dev/null | grep -q "podman-machine-default"; then
     echo "Podman 가상 머신(VM)을 초기화하고 시작합니다..."
@@ -46,7 +62,24 @@ if command -v podman &>/dev/null; then
   fi
 fi
 
+# ---------- [6/6] 작업 디렉토리 생성 ----------
 echo ""
-echo "🎉 모든 애플리케이션 및 개발 환경 설치가 완료되었습니다!"
-echo "👉 컨테이너: 'podman' (또는 'docker' 별칭 사용 가능)"
-echo "👉 데이터베이스: SSMS 대체인 'Azure Data Studio' 또는 'DBeaver' 실행"
+echo "📂 [6/6] 기본 작업 디렉토리 생성..."
+mkdir -p "$HOME/personal" "$HOME/orca"
+
+echo ""
+echo "========================================"
+echo "  🎉 macOS 개발 환경 설치 완료!"
+echo "========================================"
+echo ""
+echo "📋 다음 단계를 진행하세요:"
+echo "  1) bash install.sh          ← Git/셸 설정 심볼릭 링크 연결"
+echo "  2) gh auth login -u yxxh020 ← 개인 GitHub 계정 로그인"
+echo "  3) gh auth login -u YiranHwang ← 회사 GitHub 계정 로그인"
+echo ""
+echo "💡 설치된 주요 도구:"
+echo "  컨테이너  : docker (Docker Desktop) + podman (무료 대안)"
+echo "  DB 쿼리   : Azure Data Studio (SSMS 대체) + DBeaver"
+echo "  원격 접속  : Windows App (RDCMan 대체 RDP 클라이언트)"
+echo "  지식 관리  : Obsidian"
+echo "  생산성     : AltTab + Rectangle + Raycast"
