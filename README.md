@@ -16,8 +16,8 @@ dotfiles/
 ├── install.ps1             # Windows 자동 설치 스크립트
 ├── git/
 │   ├── .gitconfig          # 크로스 플랫폼 includeIf 다중 계정 분기
-│   ├── .gitconfig-personal # 개인 계정 (yxxh020)
-│   └── .gitconfig-orca     # 회사 계정 (YiranHwang)
+│   ├── .gitconfig-personal # 계정1
+│   └── .gitconfig-orca     # 계정2
 ├── ssh/
 │   └── config.example      # SSH 호스트 템플릿
 └── shell/
