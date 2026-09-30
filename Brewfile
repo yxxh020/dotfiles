@@ -12,9 +12,13 @@ brew "direnv"           # 디렉토리별 환경변수 관리
 brew "tokei"            # 코드 라인 수 분석 도구
 brew "oh-my-posh"       # 터미널 프롬프트 테마
 
+# --- 컨테이너 도구 (Docker Desktop 대체 - 완전 무료 오픈소스) ---
+brew "podman"
+brew "podman-compose"
+cask "podman-desktop"   # Podman GUI 대시보드
+
 # --- GUI 애플리케이션 (Casks) ---
 cask "visual-studio-code"
-cask "docker"           # Docker Desktop
 cask "keepassxc"        # 패스워드 금고 및 시크릿 관리
 cask "ghostty"          # 최신 고속 GPU 가속 터미널
 

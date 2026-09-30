@@ -35,6 +35,18 @@ fi
 # 2) Orca 데스크톱 다운로드 안내
 echo "ℹ️ Orca 데스크톱은 https://onorca.dev 에서 macOS(Apple Silicon/Intel) 버전을 다운로드할 수 있습니다."
 
+echo "🐳 [5/5] Podman 컨테이너 머신 초기화..."
+if command -v podman &>/dev/null; then
+  if ! podman machine list --noheading 2>/dev/null | grep -q "podman-machine-default"; then
+    echo "Podman 가상 머신(VM)을 초기화하고 시작합니다..."
+    podman machine init || true
+    podman machine start || true
+  else
+    echo "✅ Podman 가상 머신이 이미 준비되어 있습니다."
+  fi
+fi
+
 echo ""
 echo "🎉 모든 애플리케이션 및 개발 환경 설치가 완료되었습니다!"
-echo "👉 데이터베이스 작업은 SSMS 대체인 'Azure Data Studio' 또는 'DBeaver'를 실행하세요."
+echo "👉 컨테이너: 'podman' (또는 'docker' 별칭 사용 가능)"
+echo "👉 데이터베이스: SSMS 대체인 'Azure Data Studio' 또는 'DBeaver' 실행"
