@@ -36,12 +36,15 @@ dotfiles/
 ```bash
 # 1. 저장소 클론
 git clone https://github.com/yxxh020/dotfiles.git ~/dotfiles
-
-# 2. 자동 설치 스크립트 실행
 cd ~/dotfiles
+
+# 2. 필수 앱 및 개발 도구 일괄 다운로드 & 설치 (VS Code, Docker, SSMS 대체품 등)
+bash install-apps.sh
+
+# 3. Git 및 셸 환경 설정 심볼릭 링크 연결
 bash install.sh
 
-# 3. GitHub CLI 멀티 계정 로그인
+# 4. GitHub CLI 멀티 계정 로그인
 gh auth login -u yxxh020
 gh auth login -u YiranHwang
 ```
