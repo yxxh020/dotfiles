@@ -37,17 +37,33 @@ fnm install --lts
 fnm default lts-latest
 npm install -g pnpm bun
 
-# ---------- [4/6] AI 코딩 에이전트 ----------
+# ---------- [4/6] AI 코딩 에이전트 & IDE ----------
 echo ""
-echo "🤖 [4/6] AI 코딩 에이전트 설치..."
-# Antigravity CLI
+echo "🤖 [4/6] AI 코딩 도구 설치 (Antigravity & Orca)..."
+# Antigravity CLI (agy)
 if ! command -v agy &>/dev/null; then
   echo "Antigravity CLI 설치 중..."
-  curl -fsSL https://antigravity.google/install.sh 2>/dev/null | bash || true
+  brew install antigravity-cli 2>/dev/null || curl -fsSL https://antigravity.google/cli/install.sh | bash || true
+else
+  echo "✅ Antigravity CLI(agy)가 이미 설치되어 있습니다."
 fi
 
-# Orca 데스크톱 안내
-echo "ℹ️  Orca 데스크톱 → https://onorca.dev 에서 macOS(Apple Silicon/Intel) 버전 다운로드"
+# Antigravity IDE (GUI 앱)
+if ! brew list --cask antigravity-ide &>/dev/null; then
+  echo "Antigravity IDE 설치 중..."
+  brew install --cask antigravity-ide || true
+else
+  echo "✅ Antigravity IDE가 이미 설치되어 있습니다."
+fi
+
+# Orca 데스크톱 자동 설치
+if ! brew list --cask orca &>/dev/null; then
+  echo "Orca 데스크톱 설치 중..."
+  brew tap stablyai/orca
+  brew install --cask stablyai/orca/orca || true
+else
+  echo "✅ Orca가 이미 설치되어 있습니다."
+fi
 
 # ---------- [5/6] Podman 컨테이너 머신 초기화 ----------
 echo ""

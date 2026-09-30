@@ -29,6 +29,10 @@ cask "podman-desktop"   # Podman GUI 대시보드
 # 4. 코드 에디터 및 AI 도구
 # ------------------------------------------------------------------------------
 cask "visual-studio-code"
+cask "antigravity-ide"    # Google Antigravity 공식 GUI IDE
+brew "antigravity-cli"    # Google Antigravity CLI (명령어: agy)
+tap "stablyai/orca"
+cask "orca"
 
 # ------------------------------------------------------------------------------
 # 5. 보안 및 비밀번호 관리

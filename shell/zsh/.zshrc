@@ -3,7 +3,7 @@
 # ==============================================================================
 
 # 1. Path & Environment Variables
-export PATH="$HOME/.local/bin:$HOME/bin:/opt/homebrew/bin:$PATH"
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$HOME/.local/bin:$HOME/bin:/opt/homebrew/bin:$PATH"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="code --wait"
