@@ -1,3 +1,11 @@
 [user]
 	name = YiranHwang
 	email = YiranHwang@users.noreply.github.com
+
+[credential "https://github.com"]
+	helper = 
+	helper = "!f() { test \"$1\" = get && echo \"username=YiranHwang\" && echo \"password=$(gh auth token --user YiranHwang)\"; }; f"
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = "!f() { test \"$1\" = get && echo \"username=YiranHwang\" && echo \"password=$(gh auth token --user YiranHwang)\"; }; f"

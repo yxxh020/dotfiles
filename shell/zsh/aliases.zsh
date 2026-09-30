@@ -1,0 +1,83 @@
+# ==============================================================================
+# Zsh Aliases (aliases.zsh)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. 일반 유틸리티 & 시스템
+# ------------------------------------------------------------------------------
+alias c="clear"
+alias cls="clear"
+alias refresh="source ~/.zshrc"
+alias myip="curl -4 -s ifconfig.me"
+
+# modern ls (eza가 설치되어 있으면 사용)
+if command -v eza &>/dev/null; then
+  alias ls="eza --icons --sort=name"
+  alias l="eza --icons --sort=name"
+  alias ll="eza -la --icons --sort=name"
+  alias lR="eza -R --icons --sort=name"
+  alias llR="eza -laR --icons --sort=name"
+fi
+
+# modern cat (bat이 설치되어 있으면 사용)
+if command -v bat &>/dev/null; then
+  alias cat="bat"
+fi
+
+# ------------------------------------------------------------------------------
+# 2. Git Aliases (Oh My Zsh 호환)
+# ------------------------------------------------------------------------------
+alias g="git"
+alias gst="git status"
+alias gss="git status -s"
+alias gd="git diff"
+alias gds="git diff --staged"
+alias ga="git add"
+alias gaa="git add --all"
+alias gc="git commit -v"
+alias gcm="git commit -m"
+alias gca="git commit -v -a"
+alias gcam="git commit -a -m"
+alias gb="git branch"
+alias gba="git branch -a"
+alias gco="git checkout"
+alias gcb="git checkout -b"
+alias gsw="git switch"
+alias gswc="git switch -c"
+alias gp="git push"
+alias gpl="git pull"
+alias glg="git log --stat"
+alias glo="git log --oneline --decorate"
+
+# ------------------------------------------------------------------------------
+# 3. 컨테이너 (Docker -> Podman Drop-in Replacement)
+# ------------------------------------------------------------------------------
+alias docker="podman"
+alias docker-compose="podman compose"
+alias pdps='podman ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
+alias pdls="pdps"
+alias pdlg="podman logs -tf"
+alias pdim="podman images -a"
+alias pdst="podman restart"
+alias pdsp="podman stop"
+alias pdrm="podman rm"
+alias pdri="podman image rm"
+
+# ------------------------------------------------------------------------------
+# 4. Antigravity & AI 도구
+# ------------------------------------------------------------------------------
+alias as="agy-switch"
+alias asw="agy-switch"
+
+# ------------------------------------------------------------------------------
+# 5. 브라우저 & 프로필
+# ------------------------------------------------------------------------------
+alias chls="chrome-profiles"
+alias chn="chro new"
+
+# ------------------------------------------------------------------------------
+# 6. 보안 및 비밀번호 (KeePassXC)
+# ------------------------------------------------------------------------------
+if [ -d "/Applications/KeePassXC.app" ]; then
+  alias keepassxc-cli="/Applications/KeePassXC.app/Contents/MacOS/keepassxc-cli"
+fi

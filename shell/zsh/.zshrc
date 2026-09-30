@@ -1,80 +1,51 @@
 # ==============================================================================
-# macOS Zsh Configuration (.zshrc)
+# macOS Zsh Configuration (.zshrc) - Modular Entrypoint
 # ==============================================================================
 
-# 1. Path & Environment Variables
+# 1. Homebrew Environment
 if [ -x "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [ -x "/usr/local/bin/brew" ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+# 2. Path & Core Environment Variables
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$HOME/.local/bin:$HOME/bin:$PATH"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="code --wait"
 
-# 2. Node.js (fnm) Init
-if command -v fnm &>/dev/null; then
-  eval "$(fnm env --use-on-cd --shell zsh)"
+# 3. Oh My Zsh Configuration
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="agnoster"
+
+# agnoster 테마에서 사용자명@호스트명(user@macbook)을 숨기고 깔끔하게 표시 (SSH 접속 시에만 표시)
+DEFAULT_USER="$(whoami)"
+
+plugins=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
+
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+  source "$ZSH/oh-my-zsh.sh"
 fi
 
-# 3. Oh My Posh / Starship Prompt (선택)
-if command -v oh-my-posh &>/dev/null; then
-  eval "$(oh-my-posh init zsh)"
+# 4. Source Modular Dotfiles Configs
+DOTFILES_SHELL_DIR="${${(%):-%x}:A:h}"
+if [ -d "$DOTFILES_SHELL_DIR" ]; then
+  [ -f "$DOTFILES_SHELL_DIR/env.zsh" ] && source "$DOTFILES_SHELL_DIR/env.zsh"
+  [ -f "$DOTFILES_SHELL_DIR/aliases.zsh" ] && source "$DOTFILES_SHELL_DIR/aliases.zsh"
+  [ -f "$DOTFILES_SHELL_DIR/functions.zsh" ] && source "$DOTFILES_SHELL_DIR/functions.zsh"
 fi
 
-# ------------------------------------------------------------------------------
-# 4. GitHub CLI (gh) 디렉토리별 계정 자동 전환 래퍼
-# ------------------------------------------------------------------------------
-gh() {
-  local target_user=""
-  if [[ "$PWD" == "$HOME/personal"* ]]; then
-    target_user="yxxh020"
-  elif [[ "$PWD" == "$HOME/orca"* ]]; then
-    target_user="YiranHwang"
-  fi
-
-  if [[ -n "$target_user" && "$1" != "auth" ]]; then
-    local token
-    token=$(command gh auth token --user "$target_user" 2>/dev/null)
-    if [[ -n "$token" ]]; then
-      GH_TOKEN="$token" command gh "$@"
-      return
-    fi
-  fi
-
-  command gh "$@"
-}
-
-# ------------------------------------------------------------------------------
-# 5. Git Aliases (Oh My Zsh 호환)
-# ------------------------------------------------------------------------------
-alias g="git"
-alias gst="git status"
-alias gss="git status -s"
-alias gd="git diff"
-alias gds="git diff --staged"
-alias ga="git add"
-alias gaa="git add --all"
-alias gc="git commit -v"
-alias gcm="git commit -m"
-alias gca="git commit -v -a"
-alias gcam="git commit -a -m"
-alias gb="git branch"
-alias gba="git branch -a"
-alias gco="git checkout"
-alias gcb="git checkout -b"
-alias gsw="git switch"
-alias gswc="git switch -c"
-alias gp="git push"
-alias gpl="git pull"
-alias glg="git log --stat"
-alias glo="git log --oneline --decorate"
-alias c="clear"
-
-# ------------------------------------------------------------------------------
-# 6. Container Aliases (Docker -> Podman Drop-in Replacement)
-# ------------------------------------------------------------------------------
-alias docker="podman"
-alias docker-compose="podman compose"
+# 5. Local Override Configuration (머신별 독립 설정)
+if [ -f "$HOME/.zshrc.local" ]; then
+  source "$HOME/.zshrc.local"
+fi
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/hwang/.docker/completions $fpath)
+autoload -Uz compinit
+(( ${+_comps[docker]} )) || compinit
+# End of Docker CLI completions

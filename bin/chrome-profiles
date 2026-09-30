@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+import json
+import os
+import sys
+import unicodedata
+
+def str_width(s):
+    return sum(2 if unicodedata.east_asian_width(c) in ("F", "W") else 1 for c in s)
+
+def pad_str(s, width):
+    w = str_width(s)
+    if w >= width:
+        return s
+    return s + " " * (width - w)
+
+def get_priority_emails():
+    # 1. 환경 변수 CHROME_PRIORITY_EMAILS="email1@gmail.com,email2@company.com" 지원
+    env_emails = os.environ.get("CHROME_PRIORITY_EMAILS")
+    if env_emails:
+        return [e.strip() for e in env_emails.split(",") if e.strip()]
+
+    # 2. 로컬 설정 파일 ~/.chrome-profiles.json 지원
+    conf_path = os.path.expanduser("~/.chrome-profiles.json")
+    if os.path.exists(conf_path):
+        try:
+            with open(conf_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, list):
+                    return data
+                elif isinstance(data, dict) and "priority_emails" in data:
+                    return data["priority_emails"]
+        except Exception:
+            pass
+
+    return []
+
+def get_ordered_profiles():
+    candidates = [
+        os.path.expanduser("~/Library/Application Support/Google/Chrome/Local State"),
+        os.path.expanduser("~/.config/google-chrome/Local State"),
+        os.path.expanduser("~/.config/chromium/Local State")
+    ]
+    local_state_path = next((p for p in candidates if os.path.exists(p)), None)
+    if not local_state_path:
+        return []
+
+    try:
+        with open(local_state_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return []
+
+    profiles = data.get("profile", {}).get("info_cache", {})
+    priority_emails = get_priority_emails()
+
+    items = list(profiles.items())
+    ordered = []
+
+    for email in priority_emails:
+        match = next((item for item in items if item[1].get("user_name") == email), None)
+        if match:
+            ordered.append(match)
+            items.remove(match)
+
+    def rest_key(item):
+        k = item[0]
+        if k == "Default":
+            return (0, 0)
+        if k.startswith("Profile "):
+            try:
+                return (1, int(k.split()[1]))
+            except ValueError:
+                pass
+        return (2, k)
+
+    items.sort(key=rest_key)
+    ordered.extend(items)
+    return ordered
+
+def main():
+    ordered = get_ordered_profiles()
+    if not ordered:
+        print("❌ Google Chrome 프로필 정보를 찾을 수 없습니다.", file=sys.stderr)
+        sys.exit(1)
+
+    # CLI 인자 처리: --get-dir <index_or_name>
+    if len(sys.argv) >= 3 and sys.argv[1] == "--get-dir":
+        query = sys.argv[2]
+        # 1. 숫자인 경우 (인덱스)
+        if query.isdigit():
+            idx = int(query)
+            if 0 <= idx < len(ordered):
+                print(ordered[idx][0])
+                sys.exit(0)
+            else:
+                print(f"Profile {query}")
+                sys.exit(0)
+
+        # 2. Default 또는 Profile X 직접 매칭
+        for dir_name, _ in ordered:
+            if dir_name.lower() == query.lower():
+                print(dir_name)
+                sys.exit(0)
+
+        # 3. 이메일/이름 키워드 검색
+        for dir_name, info in ordered:
+            uname = info.get("user_name", "").lower()
+            name = info.get("name", "").lower()
+            gaia = info.get("gaia_name", "").lower()
+            q = query.lower()
+            if q in uname or q in name or q in gaia:
+                print(dir_name)
+                sys.exit(0)
+
+        # 기본값 폴백
+        print(query)
+        sys.exit(0)
+
+    # 목록 출력
+    print("=" * 72)
+    print(f" {'ID':<3} | {'디렉터리':<12} | {'프로필 이름':<18} | {'Google 계정 (Email)'}")
+    print("-" * 72)
+
+    for idx, (dir_name, info) in enumerate(ordered):
+        name = info.get("name", "")
+        email = info.get("user_name", "")
+        if not email:
+            email = "(로컬 / 미로그인)"
+
+        pad_dir = pad_str(dir_name, 12)
+        pad_name = pad_str(name, 18)
+        print(f" [{idx}] | {pad_dir} | {pad_name} | {email}")
+
+    print("=" * 72)
+    print("💡 사용법:")
+    print("  chro 0          # 0번 프로필로 Chrome 새 창 실행")
+    print("  chro 1          # 1번 프로필로 Chrome 새 창 실행")
+    print("  chro new        # 기본 프로필 새 창")
+    print("  chro 0 https://github.com  # 지정 URL 열기")
+
+if __name__ == "__main__":
+    main()
