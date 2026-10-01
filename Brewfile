@@ -74,3 +74,14 @@ cask "obsidian"          # Obsidian 마크다운 지식 베이스 Vault
 cask "alt-tab"           # Windows 스타일 창 단위 Alt+Tab 전환 도구
 cask "rectangle"         # Win+방향키 화면 분할 단축키 도구 (2분할/4분할)
 cask "raycast"           # 차세대 Spotlight 대체 런처 (클립보드 히스토리, 스니펫)
+
+# ------------------------------------------------------------------------------
+# 11. Microsoft 365 & 회사 협업 도구
+# ------------------------------------------------------------------------------
+cask "microsoft-teams"   # New Teams 사내 협업/메신저
+cask "microsoft-outlook" # 회사 메일 및 캘린더
+cask "onedrive"          # 클라우드 스토리지 (Files On-Demand 지원)
+cask "microsoft-office"  # Word, Excel, PowerPoint 오피스 패키지
+cask "microsoft-edge"    # 회사 M365/SharePoint SSO 최적화 브라우저
+cask "company-portal"    # MS Intune 기기 등록 포털 (회사 보안 정책 연동)
+
