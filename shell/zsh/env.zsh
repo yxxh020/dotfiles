@@ -16,9 +16,15 @@ fi
 if command -v fd &>/dev/null; then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git .'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git .'
 fi
 
-# 4. direnv 자동 훅
+# 4. dircolors (터미널 가독성 색상)
+if [ -f "$HOME/.dir_colors" ]; then
+  eval "$(dircolors "$HOME/.dir_colors")"
+fi
+
+# 5. direnv 자동 훅
 if command -v direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
 fi

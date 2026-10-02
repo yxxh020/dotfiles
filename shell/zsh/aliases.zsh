@@ -81,3 +81,24 @@ alias chn="chro new"
 if [ -d "/Applications/KeePassXC.app" ]; then
   alias keepassxc-cli="/Applications/KeePassXC.app/Contents/MacOS/keepassxc-cli"
 fi
+
+# ------------------------------------------------------------------------------
+# 7. Neovim & 편집기 (Neovim manual 2212)
+# ------------------------------------------------------------------------------
+if command -v nvim &>/dev/null; then
+  alias vim='nvim'
+  alias vi='nvim'
+  alias nv='nvim'
+  alias vimdiff="nvim -d"
+fi
+
+# ------------------------------------------------------------------------------
+# 8. Tmux 멀티플렉서 (tmux manual 2309)
+# ------------------------------------------------------------------------------
+alias tmls='tmux ls'
+alias tmrs='tmux attach-session'
+alias tmpg='tmux attach-session -t pgsql'
+alias tmdl='tmux attach-session -t dlight'
+alias tmun='tmux attach-session -t uxn'
+alias tmpy='tmux attach-session -t python'
+
