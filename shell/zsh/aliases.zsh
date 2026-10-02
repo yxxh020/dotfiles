@@ -45,9 +45,11 @@ alias gcb="git checkout -b"
 alias gsw="git switch"
 alias gswc="git switch -c"
 alias gp="git push"
+alias gl="git pull"
 alias gpl="git pull"
 alias glg="git log --stat"
 alias glo="git log --oneline --decorate"
+alias glog="git log --oneline --decorate --graph"
 
 # ------------------------------------------------------------------------------
 # 3. 컨테이너 (Docker -> Podman Drop-in Replacement)

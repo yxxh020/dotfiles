@@ -143,6 +143,61 @@ else
   else
     echo "   ✅ TPM이 이미 준비되어 있습니다."
   fi
+
+  # KeePassXC
+  if ! command -v keepassxc &>/dev/null; then
+    echo "   -> KeePassXC 설치 중..."
+    mkdir -p /tmp/keepassxc-dl "$HOME/.local/opt" "$HOME/.local/share/applications" "$HOME/.local/share/icons/hicolor/scalable/apps"
+    curl -fsSL "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.9/KeePassXC-2.7.9-x86_64.AppImage" -o /tmp/keepassxc-dl/KeePassXC.AppImage
+    chmod +x /tmp/keepassxc-dl/KeePassXC.AppImage
+    (cd /tmp/keepassxc-dl && ./KeePassXC.AppImage --appimage-extract >/dev/null 2>&1)
+    rm -rf "$HOME/.local/opt/keepassxc"
+    mv /tmp/keepassxc-dl/squashfs-root "$HOME/.local/opt/keepassxc"
+    rm -rf /tmp/keepassxc-dl
+    cat << 'KP_EOF' > "$HOME/.local/bin/keepassxc"
+#!/usr/bin/env bash
+exec "$HOME/.local/opt/keepassxc/AppRun" "$@"
+KP_EOF
+    chmod +x "$HOME/.local/bin/keepassxc"
+    cat << 'KP_EOF' > "$HOME/.local/bin/keepassxc-cli"
+#!/usr/bin/env bash
+exec "$HOME/.local/opt/keepassxc/AppRun" keepassxc-cli "$@"
+KP_EOF
+    chmod +x "$HOME/.local/bin/keepassxc-cli"
+    sed "s|Exec=keepassxc|Exec=$HOME/.local/bin/keepassxc|g" "$HOME/.local/opt/keepassxc/org.keepassxc.KeePassXC.desktop" > "$HOME/.local/share/applications/org.keepassxc.KeePassXC.desktop"
+    cp "$HOME/.local/opt/keepassxc/usr/share/icons/hicolor/scalable/apps/keepassxc.svg" "$HOME/.local/share/icons/hicolor/scalable/apps/" 2>/dev/null || true
+    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+  else
+    echo "   ✅ KeePassXC가 이미 설치되어 있습니다: $(keepassxc --version 2>&1 | tail -n 1)"
+  fi
+
+  # DBeaver Community
+  if ! command -v dbeaver &>/dev/null; then
+    echo "   -> DBeaver Community 설치 중..."
+    mkdir -p "$HOME/.local/opt" "$HOME/.local/bin" "$HOME/.local/share/applications"
+    curl -fsSL "https://github.com/dbeaver/dbeaver/releases/download/26.2.1/dbeaver-ce-26.2.1-linux-x86_64.tar.gz" | tar -xz -C "$HOME/.local/opt/"
+    ln -sf "$HOME/.local/opt/dbeaver/dbeaver" "$HOME/.local/bin/dbeaver"
+    cat << 'DB_EOF' > "$HOME/.local/share/applications/dbeaver-ce.desktop"
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=DBeaver Community
+GenericName=Universal Database Manager
+Comment=Universal Database Manager and SQL Client.
+Path=/home/hwang/.local/opt/dbeaver/
+Exec=/home/hwang/.local/opt/dbeaver/dbeaver %U
+Icon=/home/hwang/.local/opt/dbeaver/dbeaver.png
+Categories=IDE;Development;Database;
+StartupWMClass=DBeaver
+StartupNotify=true
+Keywords=Database;SQL;IDE;JDBC;ODBC;MySQL;PostgreSQL;Oracle;DB2;MariaDB;MSSQL;SQLServer;
+MimeType=application/sql;
+DB_EOF
+    update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+  else
+    echo "   ✅ DBeaver가 이미 설치되어 있습니다: $(which dbeaver)"
+  fi
 fi
 
 # ---------- [3/6] Node.js & 패키지 매니저 ----------
