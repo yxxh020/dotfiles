@@ -52,18 +52,20 @@ alias glo="git log --oneline --decorate"
 alias glog="git log --oneline --decorate --graph"
 
 # ------------------------------------------------------------------------------
-# 3. 컨테이너 (Docker -> Podman Drop-in Replacement)
+# 3. 컨테이너 (Podman이 있을 경우에만 Docker Drop-in Replacement 적용)
 # ------------------------------------------------------------------------------
-alias docker="podman"
-alias docker-compose="podman compose"
-alias pdps='podman ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
-alias pdls="pdps"
-alias pdlg="podman logs -tf"
-alias pdim="podman images -a"
-alias pdst="podman restart"
-alias pdsp="podman stop"
-alias pdrm="podman rm"
-alias pdri="podman image rm"
+if command -v podman &>/dev/null; then
+  alias docker="podman"
+  alias docker-compose="podman compose"
+  alias pdps='podman ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
+  alias pdls="pdps"
+  alias pdlg="podman logs -tf"
+  alias pdim="podman images -a"
+  alias pdst="podman restart"
+  alias pdsp="podman stop"
+  alias pdrm="podman rm"
+  alias pdri="podman image rm"
+fi
 
 # ------------------------------------------------------------------------------
 # 4. Antigravity & AI 도구

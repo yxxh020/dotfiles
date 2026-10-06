@@ -49,3 +49,4 @@ fpath=(/Users/hwang/.docker/completions $fpath)
 autoload -Uz compinit
 (( ${+_comps[docker]} )) || compinit
 # End of Docker CLI completions
+eval "$(/home/hwang/.local/share/fnm/fnm env --shell zsh)"
