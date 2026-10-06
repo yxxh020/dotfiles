@@ -3,6 +3,10 @@
 	quotepath = false
 	editor = code --wait
 
+[user]
+	name = YiranHwang
+	email = YiranHwang@users.noreply.github.com
+
 [init]
 	defaultBranch = main
 
@@ -45,3 +49,6 @@
 
 [includeIf "gitdir/i:C:/orca/"]
 	path = ~/.gitconfig-orca
+
+[pull]
+	rebase = true
