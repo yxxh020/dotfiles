@@ -8,7 +8,24 @@
 alias c="clear"
 alias cls="clear"
 alias refresh="source ~/.zshrc"
-alias myip="curl -4 -s ifconfig.me"
+
+# IP 주소 조회 (로컬 + 퍼블릭)
+myip() {
+  echo "🏠 Local IP:"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    local wifi_ip=$(ipconfig getifaddr en0 2>/dev/null)
+    local eth_ip=$(ipconfig getifaddr en1 2>/dev/null)
+    [ -n "$wifi_ip" ] && echo "   Wi-Fi (en0) : $wifi_ip"
+    [ -n "$eth_ip" ]  && echo "   Ethernet (en1): $eth_ip"
+    [ -z "$wifi_ip" ] && [ -z "$eth_ip" ] && echo "   (연결된 네트워크 없음)"
+  else
+    ip -4 addr show scope global 2>/dev/null | awk '/inet / {printf "   %-10s : %s\n", $NF, $2}' \
+      || hostname -I 2>/dev/null | awk '{print "   " $1}'
+  fi
+  echo "🌐 Public IP:"
+  local pub_ip=$(curl -4 -s --connect-timeout 3 ifconfig.me 2>/dev/null)
+  echo "   ${pub_ip:-(조회 실패 - 인터넷 연결 확인)}"
+}
 
 # modern ls (eza가 설치되어 있으면 사용)
 if command -v eza &>/dev/null; then
