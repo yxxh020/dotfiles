@@ -142,6 +142,11 @@ if [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
 fi
 ln -sf "$DOTFILES_DIR/shell/zsh/.zshrc" "$HOME/.zshrc"
 
+# .zshenv 심볼릭 링크 (비대화형 서브쉘 환경변수)
+if [ -f "$DOTFILES_DIR/shell/zsh/.zshenv" ]; then
+    ln -sf "$DOTFILES_DIR/shell/zsh/.zshenv" "$HOME/.zshenv"
+fi
+
 # Bash 히스토리가 있고 Zsh 히스토리가 없다면 자동 복사
 if [ -f "$HOME/.bash_history" ] && [ ! -s "$HOME/.zsh_history" ]; then
     cp "$HOME/.bash_history" "$HOME/.zsh_history"

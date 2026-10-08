@@ -222,14 +222,6 @@ else
 fi
 
 if [ "$OS_TYPE" = "Darwin" ]; then
-  # Antigravity IDE (GUI 앱)
-  if ! brew list --cask antigravity-ide &>/dev/null; then
-    echo "Antigravity IDE 설치 중..."
-    brew install --cask antigravity-ide || true
-  else
-    echo "✅ Antigravity IDE가 이미 설치되어 있습니다."
-  fi
-
   # Orca 데스크톱 자동 설치
   if ! brew list --cask orca &>/dev/null; then
     echo "Orca 데스크톱 설치 중..."
