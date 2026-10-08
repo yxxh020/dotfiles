@@ -38,7 +38,8 @@ cask "orca"
 # ------------------------------------------------------------------------------
 cask "keepassxc"        # 팀/개인 비밀번호 금고 및 시크릿 관리
 brew "rclone"           # 클라우드 스토리지(Google Drive) 동기화 도구
-brew "sshpass"          # 비대화형 SSH 비밀번호 자동 입력 도구
+tap "hudochenkov/sshpass"
+brew "hudochenkov/sshpass/sshpass" # 비대화형 SSH 비밀번호 자동 입력 도구
 
 # ------------------------------------------------------------------------------
 # 6. 터미널 및 셸 생산성
@@ -50,7 +51,7 @@ brew "fzf"              # 고속 대화형 퍼지 검색기
 brew "fd"               # find 대체 고속 파일 탐색기
 brew "bat"              # 구문 강조 지원 cat 대체 유틸리티
 brew "tmux"             # 터미널 멀티플렉서
-cask "font-meslo-lg-nerd-font" # Oh My Posh 권장 Nerd Font (기호/아이콘 지원)
+cask "font-meslo-lg-nerd-font" # Oh My Zsh agnoster 테마 권장 Nerd Font (기호/아이콘 지원)
 cask "font-d2coding-nerd-font" # D2Coding 한글/영문 고정폭 Nerd Font
 
 # ------------------------------------------------------------------------------
