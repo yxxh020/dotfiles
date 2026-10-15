@@ -72,8 +72,10 @@ alias glo="git log --oneline --decorate"
 alias glog="git log --oneline --decorate --graph"
 
 # ------------------------------------------------------------------------------
-# 3. 컨테이너 (Podman이 있을 경우에만 Docker Drop-in Replacement 적용)
+# 3. 컨테이너 (Podman 및 Lazydocker)
 # ------------------------------------------------------------------------------
+alias lzd="lazydocker"
+
 if command -v podman &>/dev/null; then
   alias docker="podman"
   alias docker-compose="podman compose"

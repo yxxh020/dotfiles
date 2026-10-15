@@ -49,6 +49,12 @@ install_system_packages() {
                 echo "🐳 docker 그룹에 $USER 추가 중..."
                 sudo usermod -aG docker "$USER" || true
             fi
+
+            # lazydocker 확인 및 설치
+            if ! command -v lazydocker &>/dev/null; then
+                echo "🐳 [Linux] lazydocker 설치 중..."
+                DIR="$HOME/.local/bin" curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash || true
+            fi
         elif command -v dnf &>/dev/null; then
             echo "📦 [Linux/DNF] 필수 패키지 설치 확인 중..."
             sudo dnf install -y zsh curl git tmux vim neovim fzf docker || true
@@ -71,7 +77,7 @@ install_system_packages() {
         echo "🍎 [macOS] 환경 설정 확인..."
         if command -v brew &>/dev/null; then
             echo "📦 [macOS/Homebrew] 필수 도구 설치 확인..."
-            brew install zsh fzf tmux neovim git || true
+            brew install zsh fzf tmux neovim git lazydocker || true
         else
             echo "ℹ️ Homebrew가 설치되어 있지 않습니다. 필요 시 https://brew.sh 에서 설치하세요."
         fi
