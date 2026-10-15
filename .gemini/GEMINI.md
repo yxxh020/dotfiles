@@ -9,48 +9,30 @@ However, all commit messages must be written in the following order:
 1. English  
 2. 한글
 
-### **2. Documentation Workflow**
+### **2. Documentation Workflow (Unified AGENTS.md)**
 
-Work must be based on the following specific files. Do not create additional documents unless there is a special reason or explicit approval.
+기존의 `1prd.md`, `2todo.md`, `3history.md` 분절 방식은 전면 폐기되었으며, 모든 요구사항 명세(PRD), 작업 지침 및 실행 계획은 **`AGENTS.md`** 단일 파일로 일원화하여 관리합니다.
 
-**1prd.md** (Project Requirements Document)
+* **Single Source of Truth (`AGENTS.md`)**:
+  * **PRD 역할 흡수**: 프로젝트의 목표, 범위, 요구사항 명세(기존 `1prd.md`)를 `AGENTS.md`에 명확히 정의합니다.
+  * **에이전트 지침 및 컨텍스트**: 환경 감지 기준, 아키텍처, 코딩 컨벤션, 검증 방법을 포함하여 AI 에이전트가 최적의 결정을 내릴 수 있도록 돕습니다.
+  * 불필요한 다중 문서 분할을 지양하여 문서 간 동기화 불일치를 방지하고 컨텍스트 윈도우(토큰)를 최적화합니다.
+* **태스크 및 진행 관리**:
+  * 진행할 작업 목록은 `AGENTS.md` 내 태스크 목록/체크리스트 또는 대화 기반 실행 계획으로 관리하며 순차적으로 진행합니다.
+  * 작업 이력은 Git 커밋 로그(`git log`) 및 버전 제어로 투명하게 관리하므로, 중복 기록용 히스토리 파일(`3history.md`)은 생성하지 않습니다.
+* **상세 기술 문서**:
+  * 영구 보관이나 심화 설명이 필요한 아키텍처/기술 가이드는 `docs/` 디렉토리 하위에 주제별 마크다운 파일로 관리합니다.
 
-* Defines the scope and goals of the project.  
-* Specifies what needs to be done.
+### **3. Workspace & Context Management (Single Root AGENTS.md)**
 
-**2todo.md** (Task List)
-
-* Contains actionable detailed items to achieve the goals defined in 1prd.md.  
-* MECE Principle: Items must be Mutually Independent and Collectively Exhaustive.  
-* Do not duplicate tasks (e.g., a task in todo 1 should not appear again in todo 2).  
-* Dynamic Updates: New tasks discovered during work must be immediately added to this list.  
-* Priority: Tasks with the highest priority must be at the top.  
-* Completion Status: Completed tasks are marked with `x` for consistency.
-
-**3history.md** (Progress Log)
-
-* Records the results of executing items from 2todo.md.  
-* Sorting: The most recent entries must be at the top.  
-* Format:  
-  `YYMMDD HH:MM [Title from 2todo.md]`  
-  `[Detailed description of work performed]`  
-* Manuals: When detailed manuals are needed, create them in the specific subfolder where work is in progress, not in the root.
-* Technical Guides: Technical suggestions or advice are recorded in separate md files within the `docs` directory, and special notes or plans are written in the `docs/planN` directory.
-
-### **3. Workspace & Context Management**
-
-**Sub-tasks / Individual Task Folders**
-
-* Large-scale Tasks: If a task is large enough to be considered a separate unit, create a subfolder or numbered task folder.  
-  Example) 001-environment, 002-UI, 003-member, 004-books, 005-loan  
-* Execution: All sub-tasks are performed within their respective folders.  
-* Modularization: When tasks are separated, create separate `1prd.md`, `2todo.md`, and `3history.md` files within that folder (e.g., `001-ui`) for management.
-* Purpose: This is strictly applied to effectively manage the context window (token limits) and prevent memory overflow.
+* **루트 단일화 원칙**: 하위 디렉토리/작업 폴더마다 개별 `AGENTS.md`를 분산 생성하지 않습니다. 프로젝트 루트의 단일 `AGENTS.md` 내에서 도메인 및 모듈별 섹션(`## [Module] <이름>` 등)으로 구조화하여 관리합니다.
+* **단일 진실 공급원(SSOT)**: 에이전트는 루트 `AGENTS.md` 하나만 참조하여 전체 프로젝트 아키텍처와 세부 모듈 요구사항을 파악할 수 있어야 하며, 문서 파편화 및 동기화 불일치를 방지합니다.
+* **서브태스크 작업 단위**: 대규모 작업이라도 별도 문서 파일을 남발하지 않으며, 작업 분할이 필요한 경우 루트 `AGENTS.md`의 태스크 섹션 또는 대화 세션의 실행 계획을 통해 순차 진행합니다.
 
 ### **4. Korean Language**
 
 * Implementation plans and all documents should be shown in Korean in the final version.  
-* Always update plans in 1prd.md and 2todo.md.
+* Always update specifications and plans in `AGENTS.md`.
 
 ### **5. AI Collaboration & Response Style**
 
@@ -64,7 +46,7 @@ Work must be based on the following specific files. Do not create additional doc
 
 ### **6. Implementation & Quality Management**
 
-* **Sequential Implementation**: Implement sequentially from the top task in `2todo.md`.
+* **Sequential Implementation**: Implement sequentially based on the defined tasks/steps in `AGENTS.md` or the agreed plan.
 * **Quality Principles**: Write unit tests when possible before implementation, and apply design patterns and clean code. When adding code, always review the reuse of existing methods.
 * **Verification & Deployment**: After each task completion, verify operation through testing and app execution. If there are no issues and the user has explicitly requested, proceed with Git commit.
 

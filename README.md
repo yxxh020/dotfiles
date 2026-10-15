@@ -18,6 +18,7 @@ dotfiles/
 ├── install.ps1             # Windows 자동 설치 스크립트
 ├── .gemini/                # AI 코딩 에이전트(Gemini/Antigravity) 전역 규칙
 │   └── GEMINI.md           # 대화, 커밋, 태스크 관리 및 추론 예산 워크플로우
+├── AGENTS.md               # 요구사항 정의서(PRD) 및 AI 에이전트 지침 (단일 진실 공급원)
 ├── bin/                    # 공용 커스텀 CLI 바이너리 (~/.local/bin 링크)
 │   ├── agy-switch          # Antigravity CLI 계정 스위처 (as p / as o)
 │   └── chrome-profiles     # Google Chrome 프로필 조회 및 실행 도구
