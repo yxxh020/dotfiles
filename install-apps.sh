@@ -136,6 +136,14 @@ else
     echo "   ✅ tmux가 이미 설치되어 있습니다: $(tmux -V)"
   fi
 
+  # lazydocker
+  if ! command -v lazydocker &>/dev/null; then
+    echo "   -> lazydocker 설치 중..."
+    DIR="$HOME/.local/bin" curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash || true
+  else
+    echo "   ✅ lazydocker가 이미 설치되어 있습니다: $(lazydocker --version 2>&1 | head -n 1)"
+  fi
+
   # TPM (tmux plugin manager)
   if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     echo "   -> TPM (Tmux Plugin Manager) 설치 중..."
@@ -270,14 +278,14 @@ echo "  3) gh auth login -u YiranHwang ← 회사 GitHub 계정 로그인"
 echo ""
 echo "💡 설치된 주요 도구:"
 if [ "$OS_TYPE" = "Darwin" ]; then
-  echo "  컨테이너  : docker (Docker Desktop) + podman (무료 대안)"
+  echo "  컨테이너  : lazydocker + podman (무료 컨테이너 환경)"
   echo "  DB 쿼리   : Azure Data Studio (SSMS 대체) + DBeaver"
   echo "  원격 접속  : Windows App (RDCMan 대체 RDP 클라이언트)"
   echo "  M365/업무 : Teams, Outlook, OneDrive, Office, Edge, Company Portal"
   echo "  지식 관리  : Obsidian"
   echo "  생산성     : AltTab + Rectangle + Raycast"
 else
-  echo "  에디터/도구 : Neovim, Tmux, fzf, zoxide, ripgrep, fd, bat, eza"
+  echo "  에디터/도구 : Neovim, Tmux, lazydocker, fzf, zoxide, ripgrep, fd, bat, eza"
   echo "  런타임     : Node.js (fnm), pnpm, bun"
   echo "  AI 도구    : Antigravity CLI (agy)"
   echo "  M365/업무  : Linux 환경은 브라우저(PWA) 또는 teams-for-linux / Edge 사용"

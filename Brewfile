@@ -18,12 +18,12 @@ brew "direnv"           # 디렉토리별 환경변수 자동 로더
 brew "tokei"            # 코드베이스 메트릭스 및 라인 수 분석 도구
 
 # ------------------------------------------------------------------------------
-# 3. 컨테이너 환경 (Docker Desktop & Podman 둘 다 지원)
+# 3. 컨테이너 환경 (Podman & Lazydocker)
 # ------------------------------------------------------------------------------
-cask "docker"           # Docker Desktop
-brew "podman"           # 오픈소스 무료 컨테이너 엔진
-brew "podman-compose"   # Podman Compose CLI
-cask "podman-desktop"   # Podman GUI 대시보드
+brew "lazydocker"         # 터미널 기반 Docker/Podman 컨테이너 TUI 관리 도구
+brew "podman"             # 오픈소스 무료 컨테이너 엔진
+brew "podman-compose"     # Podman Compose CLI
+cask "podman-desktop"     # Podman GUI 대시보드
 
 # ------------------------------------------------------------------------------
 # 4. 코드 에디터 및 AI 도구
