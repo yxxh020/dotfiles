@@ -1,5 +1,6 @@
 # Security: Ignore all sensitive secrets and keys
 *.kdbx
+*.kdbx.*
 *.rdg
 *.key
 *.pem
