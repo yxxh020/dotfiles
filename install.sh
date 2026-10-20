@@ -153,6 +153,15 @@ if [ -f "$DOTFILES_DIR/shell/zsh/.zshenv" ]; then
     ln -sf "$DOTFILES_DIR/shell/zsh/.zshenv" "$HOME/.zshenv"
 fi
 
+# .zprofile 심볼릭 링크 (로그인 셸 초기화 - Homebrew 등)
+if [ -f "$DOTFILES_DIR/shell/zsh/.zprofile" ]; then
+    if [ -f "$HOME/.zprofile" ] && [ ! -L "$HOME/.zprofile" ]; then
+        mv "$HOME/.zprofile" "$HOME/.zprofile.backup"
+        echo "   ⚠️ 기존 ~/.zprofile → ~/.zprofile.backup 백업 완료"
+    fi
+    ln -sf "$DOTFILES_DIR/shell/zsh/.zprofile" "$HOME/.zprofile"
+fi
+
 # Bash 히스토리가 있고 Zsh 히스토리가 없다면 자동 복사
 if [ -f "$HOME/.bash_history" ] && [ ! -s "$HOME/.zsh_history" ]; then
     cp "$HOME/.bash_history" "$HOME/.zsh_history"

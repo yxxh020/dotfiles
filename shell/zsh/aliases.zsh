@@ -70,6 +70,14 @@ alias grb="git rebase"
 alias glg="git log --stat"
 alias glo="git log --oneline --decorate"
 alias glog="git log --oneline --decorate --graph"
+alias glogw='watch -n 30 -c "git log --oneline --graph --decorate --color"'
+
+# GitHub CLI (gh) 단축어
+alias ghlow='watch -n 30 -c ghlo'
+alias ghic='gh issue close '
+alias ghio='gh issue reopen '
+alias ghil='gh issue list '
+alias ghiv='gh issue view '
 
 # ------------------------------------------------------------------------------
 # 3. 컨테이너 (Podman 및 Lazydocker)
