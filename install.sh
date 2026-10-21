@@ -192,6 +192,10 @@ if [ -f "$DOTFILES_DIR/.gemini/GEMINI.md" ]; then
     ln -sf "$DOTFILES_DIR/.gemini/GEMINI.md" "$HOME/.gemini/config/GEMINI.md"
     echo "   -> ~/.gemini/GEMINI.md 및 ~/.gemini/config/GEMINI.md 연결 완료"
 fi
+if [ -d "$DOTFILES_DIR/.agents/skills" ]; then
+    ln -sfn "$DOTFILES_DIR/.agents/skills" "$HOME/.gemini/config/skills"
+    echo "   -> ~/.gemini/config/skills/ 글로벌 AI 스킬 연결 완료 ($(ls "$DOTFILES_DIR/.agents/skills" | wc -l | tr -d ' ')개)"
+fi
 
 # ------------------------------------------------------------------------------
 # 8. SSH, Tmux, Vim/Neovim 설정 연결
