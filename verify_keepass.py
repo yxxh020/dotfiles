@@ -11,7 +11,7 @@ import getpass
 from pykeepass import PyKeePass
 from pykeepass.exceptions import CredentialsError
 
-DB_PATH = "DOTFILES_DIR/login.kdbx"
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "login.kdbx")
 
 def print_group_tree(group, depth=0):
     indent = "    " * depth

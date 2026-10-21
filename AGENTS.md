@@ -86,6 +86,25 @@ dotfiles/
 * **목표**: 로컬 금고, Google Drive 클라우드 금고, 백업 금고 간 3-Way 비교 및 충돌 없는 동기화 보장.
 * **검증**: `sync_keebox.py` 실행 전 단위 테스트(`test_sync_keebox.py`) 및 MD5 해시 비교 검증 필수.
 
+### 5.5 [Module] 글로벌 AI 스킬 라이브러리 (`.agents/skills/`)
+* **목표**: 프로젝트 독립적인 범용 AI 에이전트 스킬을 중앙 관리하여, 모든 프로젝트에서 일관된 워크플로우와 가드레일을 적용.
+* **설계 원칙**: 단일 SSOT, DRY(중복 방지), KISS(단순성 유지).
+* **스킬 인벤토리**:
+
+| 스킬명 | 용도 |
+|--------|------|
+| `docs-audit` | 문서 감사 및 최적화 (현재 상태 집중, 중복 제거, git 위임) |
+| `github-issue` | GitHub 이슈/PR 한국어 표준 템플릿 관리 (중복 방지, 라벨, 계층 구조) |
+| `issues-plan-and-resolve` | 열린 이슈 전수 분석 → 계획 댓글 → 의존 순서 일괄 해결 파이프라인 |
+| `push-guard` | 배포 브랜치 push 전 버전 확인 가드 |
+| `prod-server-guard` | 프로덕션 서버 접근 경고 및 명시적 승인 가드 |
+| `refactor` | 안전한 5단계 점진적 리팩토링 (동작 보존, 이중 안전망) |
+| `socratic-spec` | 소크라테스적 질문으로 숨겨진 가정/모호함 제거 (코드 작성 금지) |
+| `version-expert` | 버전 bump, 커밋, Git 태그 생성 자동화 |
+| `ai-add-skill` | 새 커스텀 AI 스킬 설계 및 등록 (DRY/KISS/SSOT 원칙) |
+| `multi-agent-init` | 다중 AI 도구 공존 구조 초기화 (SSOT + 얇은 래퍼) |
+| `superpowers` | 스킬 자동 발견 및 강제 호출 메타 스킬 |
+
 ---
 
 ## 6. 태스크 진행 현황 (Tasks & Roadmap)
@@ -95,6 +114,7 @@ dotfiles/
 - [x] **문서 워크플로우 단일화**: `1prd/2todo/3history` 분절 체계 폐기 및 루트 단일 `AGENTS.md` 통합 (완료)
 - [x] **전역 규칙 개정**: `.gemini/GEMINI.md` 내 단일 진실 공급원(SSOT) 규칙 정립 (완료)
 - [x] **컨테이너 도구 최적화**: Docker Desktop 제거 및 lazydocker(macOS/Linux) 추가 및 셸 단축어(`lzd`) 반영 (완료)
+- [x] **글로벌 AI 스킬 라이브러리**: `.agents/skills/`에 11개 범용 스킬 생성 (기존 프로젝트에서 일반화) (완료)
 - [ ] **정기 점검 및 유지보수**:
   - [ ] macOS/Linux `install.sh` 심볼릭 링크 및 패키지 설치 무결성 테스트
   - [ ] `Brewfile` 패키지 최신화 및 미사용 cask 정리

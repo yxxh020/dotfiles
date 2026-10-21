@@ -10,6 +10,6 @@ Host github.com
 
 # 사내/원격 데스크톱 SSH 예시
 # Host dev-desktop
-#     HostName <internal-ip>
-#     User user
+#     HostName <내부-IP-주소>
+#     User <사용자>
 #     IdentityFile ~/.ssh/id_ed25519

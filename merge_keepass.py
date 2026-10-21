@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 KeePass Database Merger
-Merge secrets-db.kdbx and next-coach.kdbx into login.kdbx as separate root-level groups.
+Merge multiple .kdbx databases into a single login.kdbx as separate root-level groups.
+
+Usage:
+  python merge_keepass.py                          # 기본: 스크립트 위치 기준
+  python merge_keepass.py /path/to/dotfiles        # 지정 디렉토리
 """
 
 import os
@@ -13,18 +17,21 @@ from datetime import datetime
 from pykeepass import PyKeePass
 from pykeepass.exceptions import CredentialsError
 
-DOTFILES_DIR = "DOTFILES_DIR"
+DOTFILES_DIR = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.abspath(__file__))
 MAIN_DB_PATH = os.path.join(DOTFILES_DIR, "login.kdbx")
-TARGETS = [
-    {
-        "path": os.path.join(DOTFILES_DIR, "secrets-db.kdbx"),
-        "group_name": "secrets-db"
-    },
-    {
-        "path": os.path.join(DOTFILES_DIR, "next-coach.kdbx"),
-        "group_name": "next-coach"
-    }
-]
+
+# 통합 대상 DB 목록: 스크립트 위치에서 login.kdbx를 제외한 모든 .kdbx 파일을 자동 탐색
+def _discover_targets():
+    targets = []
+    for f in sorted(os.listdir(DOTFILES_DIR)):
+        if f.endswith(".kdbx") and f != "login.kdbx":
+            targets.append({
+                "path": os.path.join(DOTFILES_DIR, f),
+                "group_name": os.path.splitext(f)[0]
+            })
+    return targets
+
+TARGETS = _discover_targets()
 
 def copy_entry(target_kp, target_group, src_entry):
     """Deep copy a single KeePass entry including custom properties and attachments."""
