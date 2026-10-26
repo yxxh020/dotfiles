@@ -106,6 +106,8 @@ dotfiles/
 | `superpowers` | 스킬 자동 발견 및 강제 호출 메타 스킬 |
 | `code-review` | P0-P3 심각도 분류 코드 리뷰 및 계층 이슈 생성 워크플로우 |
 | `merge-worktree` | 워크트리 커밋 → 머지 → 삭제 3단계 마무리 워크플로우 |
+| `bug-report-sync-expert` | 버그 제보(bug_reports) 환경별 동기화 및 프론트 캡처 모달 검증/수정 스킬 |
+| `bug-fix-workflow` | 버그 트리아지 → GitHub 이슈 연동 → 패치 버전 bump 및 완료 처리 전주기 워크플로우 |
 
 ---
 
@@ -116,7 +118,7 @@ dotfiles/
 - [x] **문서 워크플로우 단일화**: `1prd/2todo/3history` 분절 체계 폐기 및 루트 단일 `AGENTS.md` 통합 (완료)
 - [x] **전역 규칙 개정**: `.gemini/GEMINI.md` 내 단일 진실 공급원(SSOT) 규칙 정립 (완료)
 - [x] **컨테이너 도구 최적화**: Docker Desktop 제거 및 lazydocker(macOS/Linux) 추가 및 셸 단축어(`lzd`) 반영 (완료)
-- [x] **글로벌 AI 스킬 라이브러리**: `.agents/skills/`에 13개 범용 스킬 생성 (기존 프로젝트에서 일반화) (완료)
+- [x] **글로벌 AI 스킬 라이브러리**: `.agents/skills/`에 15개 범용 스킬 생성 (`bug-fix-workflow`, `bug-report-sync-expert` 포함) (완료)
 - [ ] **정기 점검 및 유지보수**:
   - [ ] macOS/Linux `install.sh` 심볼릭 링크 및 패키지 설치 무결성 테스트
   - [ ] `Brewfile` 패키지 최신화 및 미사용 cask 정리

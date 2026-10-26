@@ -83,6 +83,7 @@ Gemini 3.8 단일 모델 환경에서는 작업의 성격과 추론 요구량(Re
 * Python Virtual Environment: When working with Python, always use **venv**.
 * For Node.js, use **pnpm** unless otherwise specified.
 * Multi-account Git: Respect directory-specific configurations (`~/personal` vs `~/orca`).
+* Bug Reporting & Workflow: 버그 제보 시스템 및 캡처 모달은 `bug-report-sync-expert` 규칙(자동 캡처 기본값, 폰트 임베딩 스킵 최적화, Zod nullable, 환경별 DB 동기화)을 따르고, 버그 트리아지 및 해결 파이프라인은 `bug-fix-workflow`(prod 데이터 전용 접근, GitHub 이슈 연동 댓글, 패치 버전 bump, 처리완료 라벨 및 안내 댓글)를 준수합니다.
 
 ## **C. Coding Conventions**
 * Korean Sorting: When Korean string sorting is needed (especially for names, titles, etc.), always use `string.localeCompare(other, 'ko-KR')` instead of simple comparison operators (<, >) to ensure accurate character order and grouping.
