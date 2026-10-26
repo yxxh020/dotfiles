@@ -4,10 +4,7 @@
 
 All conversations are conducted in Korean. This includes documents, execution plans, implementation plans, and everything else.
 
-However, all commit messages must be written in the following order:
-
-1. English  
-2. 한글
+All commit messages must be written in Korean only (한글 단독 작성).
 
 ### **2. Documentation Workflow (Unified AGENTS.md)**
 
@@ -93,16 +90,14 @@ Gemini 3.8 단일 모델 환경에서는 작업의 성격과 추론 요구량(Re
 * Suggestion: If direct execution is not possible or not requested, suggest an appropriate commit message.
 * Message Rules:
   * Use Conventional Commits prefixes (feat, fix, docs, style, refactor, perf, test, chore, etc.).
+  * Language: Write commit messages in Korean only (영어 병기 없이 한글 단독 작성).
   * Format: 1-line title + up to 3 lines of detailed description.
-  * **Spacing Rule**: Do not leave a blank line between English and Korean descriptions; write them on consecutive lines.
 
 * **Command Writing Tip**:
-  * Repeating the `-m` option creates blank lines. To include line breaks, use Bash syntax `$''` with `\n`.
-  * Example: `git commit -m $'EnTitle\nKoTitle' -m $'EnDesc\nKoDesc'`
+  * Repeating the `-m` option creates blank lines. To include line breaks, use Bash syntax `$''` with `\n` or standard multi `-m` flags.
+  * Example: `git commit -m '<Prefix>: 한글 제목' -m '<선택> 한글 상세 설명'`
 
 [Writing Example]
-<Prefix>: One-line title (English)
-<Prefix>: 한글 제목 (Korean)
+<Prefix>: 한글 한 줄 제목
 
-[Optional] Detailed description (English)
-[선택] 상세 설명 (Korean) - *Write directly below the English description without a blank line*
+[선택] 상세 설명 (한글)

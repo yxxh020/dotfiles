@@ -53,7 +53,7 @@ dotfiles/
 * macOS(Darwin), Linux, Windows 간 환경 차이를 고려하여 크로스 플랫폼 코드를 작성합니다.
 
 ### 3.3 커밋 및 버전 제어 규칙
-* **전역 규칙 준수**: 커밋 작성 규칙, 언어 순서(영어 우선, 한글 병기) 및 Conventional Commits 프리픽스는 전역 규칙([`.gemini/GEMINI.md`](file:///.gemini/GEMINI.md))을 전적으로 준용합니다.
+* **전역 규칙 준수**: 커밋 작성 규칙, 언어 규칙(한글 단독 작성) 및 Conventional Commits 프리픽스는 전역 규칙([`.gemini/GEMINI.md`](file:///.gemini/GEMINI.md))을 전적으로 준용합니다.
 * **명시적 요청 시 커밋**: 모든 커밋은 사용자의 명시적 요청이 있을 때만 수행합니다.
 
 ---
