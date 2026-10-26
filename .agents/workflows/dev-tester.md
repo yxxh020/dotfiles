@@ -1,7 +1,7 @@
 ---
 description: 개발자와 비판적 테스터 2인 교차 검증 피드백 루프(최대 3라운드)를 가동하고 중재자가 최종 통합 검증하여 보고한다.
 skills:
-  - dev-tester-loop
+  - invite-tester
 ---
 
 # /dev-tester 워크플로우
@@ -14,7 +14,7 @@ skills:
 ## 실행 절차
 
 ### 1단계: 스킬 활성화 및 수정 범위 선언 (중재자)
-- `dev-tester-loop` 스킬을 활성화합니다.
+- `invite-tester` 스킬을 활성화합니다.
 - 사용자 요구사항을 분석하고, 수정/생성할 **허용 파일 목록(Scope)**을 선언합니다.
 
 ### 2단계: 개발자 하위 에이전트 위임 (Implementer)

@@ -118,8 +118,8 @@ dotfiles/
 * **AI 개발 & 메타 에이전트**: `subagent-driven-development`, `systematic-debugging`, `executing-plans`, `writing-plans`, `dispatching-parallel-agents`, `agentmemory-*`, `ralph-loop` 등
 * **인프라 & 배포**: `cloudflare-deploy`, `vercel-branch-deploy`, `disk-cleaner`, `disk-analyzer`, `system-doctor`, `git-hooks-setup`, `using-git-worktrees` 등
 
-#### 3) 워크플로우 템플릿 (`.agents/workflows/`, 20개)
-`tdd.md`, `systematic-debug.md`, `project-enhancement-cycle.md`, `close-worktree.md`, `dev-tester.md`, `ralph-loop.md` 등 단계별 가이드 문서 구비.
+#### 3) 워크플로우 템플릿 (`.agents/workflows/`, 21개)
+`tdd.md`, `invite-tester.md`, `systematic-debug.md`, `project-enhancement-cycle.md`, `close-worktree.md`, `dev-tester.md`, `ralph-loop.md` 등 단계별 가이드 문서 구비.
 
 ---
 
