@@ -1,0 +1,36 @@
+#!/bin/sh
+# Git commit-msg hook template
+# 커밋 메시지가 정해진 규칙(컨벤션 접두어 + 이슈번호)을 따르는지 검증합니다.
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# 1. merge/revert 커밋은 검사 예외 처리
+if echo "$commit_msg" | grep -qE "^(Merge|Revert) "; then
+    exit 0
+fi
+
+# 2. 커밋 메시지 패턴 정의
+# 규칙: 접두어(feat|fix|refactor|style|test|chore|docs|perf|ci): #이슈번호 내용
+# 단, chore, docs, ci 등은 이슈 번호를 생략할 수 있음
+pattern="^(feat|fix|refactor|style|test|chore|docs|perf|ci)(\(.+\))?: (#[0-9]+ )?.+"
+
+# 3. 패턴 매칭 검증
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+    echo "❌ [Git Hook Error] 올바르지 않은 커밋 메시지 형식입니다."
+    echo "형식 예시:"
+    echo "  - feat: #123 기능 구현"
+    echo "  - fix: #456 버그 수정"
+    echo "  - chore: 빌드 스크립트 수정 (이슈번호 생략 가능)"
+    echo "허용되는 접두어: feat, fix, refactor, style, test, chore, docs, perf, ci"
+    exit 1
+fi
+
+# 4. (선택적) Jev 초고속 유효성 검증
+if command -v jev >/dev/null 2>&1; then
+    IS_VALID=$(jev "$commit_msg" -y "Does this commit message strictly follow '<type>: #<issue> <description>' format with a meaningful description?" -q 2>/dev/null)
+    if [ "$IS_VALID" = "false" ]; then
+        echo "❌ [Jev Hook Error] 커밋 메시지 설명이 미흡하거나 규격에 맞지 않습니다."
+        exit 1
+    fi
+fi

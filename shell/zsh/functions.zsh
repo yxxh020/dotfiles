@@ -7,7 +7,13 @@
 # ------------------------------------------------------------------------------
 gh() {
   local target_user=""
-  if [[ "$PWD" == "$HOME/personal"* ]]; then
+
+  # 1. Git 저장소 내부인 경우 설정된 git config user.name 우선 적용 (워크트리 경로 호환)
+  local git_user
+  git_user=$(command git config user.name 2>/dev/null)
+  if [[ "$git_user" == "yxxh020" || "$git_user" == "YiranHwang" ]]; then
+    target_user="$git_user"
+  elif [[ "$PWD" == "$HOME/personal"* ]]; then
     target_user="yxxh020"
   elif [[ "$PWD" == "$HOME/orca"* ]]; then
     target_user="YiranHwang"

@@ -196,6 +196,10 @@ if [ -d "$DOTFILES_DIR/.agents/skills" ]; then
     ln -sfn "$DOTFILES_DIR/.agents/skills" "$HOME/.gemini/config/skills"
     echo "   -> ~/.gemini/config/skills/ 글로벌 AI 스킬 연결 완료 ($(ls "$DOTFILES_DIR/.agents/skills" | wc -l | tr -d ' ')개)"
 fi
+if [ -d "$DOTFILES_DIR/.agents/workflows" ]; then
+    ln -sfn "$DOTFILES_DIR/.agents/workflows" "$HOME/.gemini/config/workflows"
+    echo "   -> ~/.gemini/config/workflows/ 글로벌 AI 워크플로우 연결 완료 ($(ls "$DOTFILES_DIR/.agents/workflows" | wc -l | tr -d ' ')개)"
+fi
 
 # ------------------------------------------------------------------------------
 # 8. SSH, Tmux, Vim/Neovim 설정 연결

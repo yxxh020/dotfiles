@@ -86,11 +86,12 @@ dotfiles/
 * **목표**: 로컬 금고, Google Drive 클라우드 금고, 백업 금고 간 3-Way 비교 및 충돌 없는 동기화 보장.
 * **검증**: `sync_keebox.py` 실행 전 단위 테스트(`test_sync_keebox.py`) 및 MD5 해시 비교 검증 필수.
 
-### 5.5 [Module] 글로벌 AI 스킬 라이브러리 (`.agents/skills/`)
-* **목표**: 프로젝트 독립적인 범용 AI 에이전트 스킬을 중앙 관리하여, 모든 프로젝트에서 일관된 워크플로우와 가드레일을 적용.
+### 5.5 [Module] 글로벌 AI 스킬 및 워크플로우 라이브러리 (`.agents/skills/`, `.agents/workflows/`)
+* **목표**: 프로젝트 독립적인 범용 AI 에이전트 스킬(160개) 및 워크플로우(20개)를 중앙 관리하여, 모든 프로젝트에서 일관된 워크플로우와 가드레일을 적용.
 * **설계 원칙**: 단일 SSOT, DRY(중복 방지), KISS(단순성 유지).
-* **스킬 인벤토리**:
+* **동기화 경로**: `dotfiles/.agents/skills` → `~/.gemini/config/skills` (전역 AI 에이전트 자동 로드).
 
+#### 1) 핵심 가드 & 표준 스킬 (Core 15)
 | 스킬명 | 용도 |
 |--------|------|
 | `docs-audit` | 문서 감사 및 최적화 (현재 상태 집중, 중복 제거, git 위임) |
@@ -109,6 +110,17 @@ dotfiles/
 | `bug-report-sync-expert` | 버그 제보(bug_reports) 환경별 동기화 및 프론트 캡처 모달 검증/수정 스킬 |
 | `bug-fix-workflow` | 버그 트리아지 → GitHub 이슈 연동 → 패치 버전 bump 및 완료 처리 전주기 워크플로우 |
 
+#### 2) 확장 스킬 라이브러리 카테고리 (총 160개 스킬)
+* **프론트엔드 & UI/UX**: `frontend-design`, `canvas-design`, `dark-mode-expert`, `sticky-table-header`, `flexible-modal-expert`, `pill-toggle-filter-expert`, `pagination-expert`, `ctrl-click-multi-select-expert`, `url-state-sync-expert`, `ui-shortcut-expert` 등
+* **백엔드 & 데이터베이스**: `db-migrate`, `sql-query-expert`, `add-dbeaver-connection`, `nextjs-prisma-expert`, `nestjs-expert`, `supabase-keep-alive`, `prisma-docker-deploy-expert` 등
+* **테스트 & 품질 보증(QA)**: `test-driven-development`, `webapp-testing`, `qa-automation-expert`, `qa-e2e-optimization`, `playwright-safe-setup`, `playwright-user-data-dir` 등
+* **문서 & 오피스 처리**: `docx`, `pptx`, `xlsx`, `pdf`, `doc2md`, `create-markdown`, `html-render-expert`, `use-mermaid` 등
+* **AI 개발 & 메타 에이전트**: `subagent-driven-development`, `systematic-debugging`, `executing-plans`, `writing-plans`, `dispatching-parallel-agents`, `agentmemory-*`, `ralph-loop` 등
+* **인프라 & 배포**: `cloudflare-deploy`, `vercel-branch-deploy`, `disk-cleaner`, `disk-analyzer`, `system-doctor`, `git-hooks-setup`, `using-git-worktrees` 등
+
+#### 3) 워크플로우 템플릿 (`.agents/workflows/`, 20개)
+`tdd.md`, `systematic-debug.md`, `project-enhancement-cycle.md`, `close-worktree.md`, `dev-tester.md`, `ralph-loop.md` 등 단계별 가이드 문서 구비.
+
 ---
 
 ## 6. 태스크 진행 현황 (Tasks & Roadmap)
@@ -118,7 +130,7 @@ dotfiles/
 - [x] **문서 워크플로우 단일화**: `1prd/2todo/3history` 분절 체계 폐기 및 루트 단일 `AGENTS.md` 통합 (완료)
 - [x] **전역 규칙 개정**: `.gemini/GEMINI.md` 내 단일 진실 공급원(SSOT) 규칙 정립 (완료)
 - [x] **컨테이너 도구 최적화**: Docker Desktop 제거 및 lazydocker(macOS/Linux) 추가 및 셸 단축어(`lzd`) 반영 (완료)
-- [x] **글로벌 AI 스킬 라이브러리**: `.agents/skills/`에 15개 범용 스킬 생성 (`bug-fix-workflow`, `bug-report-sync-expert` 포함) (완료)
+- [x] **글로벌 AI 스킬 & 워크플로우 라이브러리 확장**: `.agents/skills/`(160개 스킬) 및 `.agents/workflows/`(20개 워크플로우) 등록 및 심볼릭 링크 완료 (완료)
 - [ ] **정기 점검 및 유지보수**:
   - [ ] macOS/Linux `install.sh` 심볼릭 링크 및 패키지 설치 무결성 테스트
   - [ ] `Brewfile` 패키지 최신화 및 미사용 cask 정리
