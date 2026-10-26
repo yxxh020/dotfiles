@@ -136,3 +136,8 @@ alias tmdl='tmux attach-session -t dlight'
 alias tmun='tmux attach-session -t uxn'
 alias tmpy='tmux attach-session -t python'
 
+# ------------------------------------------------------------------------------
+# 9. 원격 접속 & SSH
+# ------------------------------------------------------------------------------
+alias ssnx="ssh -p 2222 wonhyukc@next-coach"
+
