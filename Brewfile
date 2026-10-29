@@ -51,6 +51,7 @@ brew "fzf"              # 고속 대화형 퍼지 검색기
 brew "fd"               # find 대체 고속 파일 탐색기
 brew "bat"              # 구문 강조 지원 cat 대체 유틸리티
 brew "tmux"             # 터미널 멀티플렉서
+brew "watch"            # 주기적 명령어 실행 및 변경 감지 유틸리티 (glogw, ghlow 의존성)
 cask "font-meslo-lg-nerd-font" # Oh My Zsh agnoster 테마 권장 Nerd Font (기호/아이콘 지원)
 cask "font-d2coding-nerd-font" # D2Coding 한글/영문 고정폭 Nerd Font
 
