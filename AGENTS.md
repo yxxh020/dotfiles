@@ -121,6 +121,11 @@ dotfiles/
 #### 3) 워크플로우 템플릿 (`.agents/workflows/`, 21개)
 `tdd.md`, `invite-tester.md`, `systematic-debug.md`, `project-enhancement-cycle.md`, `close-worktree.md`, `dev-tester.md`, `ralph-loop.md` 등 단계별 가이드 문서 구비.
 
+### 5.6 [Module] 지속성 에이전트 메모리 연동 (agentmemory)
+* **목표**: Antigravity 및 지원 에이전트 간 세션 독립적인 장기 기억(BM25, 임베딩, 지식 그래프) 제공.
+* **설정 파일**: `~/.gemini/config/mcp_config.json` (`agentmemory` MCP 서버 등록), `~/.agentmemory/.env`.
+* **구동 방식**: 백엔드 데몬(`npx @agentmemory/agentmemory`, 포트 3111) 및 `@agentmemory/mcp` 브릿지 연동.
+
 ---
 
 ## 6. 태스크 진행 현황 (Tasks & Roadmap)
@@ -131,6 +136,7 @@ dotfiles/
 - [x] **전역 규칙 개정**: `.gemini/GEMINI.md` 내 단일 진실 공급원(SSOT) 규칙 정립 (완료)
 - [x] **컨테이너 도구 최적화**: Docker Desktop 제거 및 lazydocker(macOS/Linux) 추가 및 셸 단축어(`lzd`) 반영 (완료)
 - [x] **글로벌 AI 스킬 & 워크플로우 라이브러리 확장**: `.agents/skills/`(160개 스킬) 및 `.agents/workflows/`(20개 워크플로우) 등록 및 심볼릭 링크 완료 (완료)
+- [x] **에이전트 메모리(agentmemory) MCP 설정**: `mcp_config.json` 연동, 환경 초기화 및 GEMINI.md 지침 반영 (완료)
 - [ ] **정기 점검 및 유지보수**:
   - [ ] macOS/Linux `install.sh` 심볼릭 링크 및 패키지 설치 무결성 테스트
   - [ ] `Brewfile` 패키지 최신화 및 미사용 cask 정리

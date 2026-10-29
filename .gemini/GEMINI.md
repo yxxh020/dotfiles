@@ -57,6 +57,14 @@ Gemini 3.8 단일 모델 환경에서는 작업의 성격과 추론 요구량(Re
 * **4. Code Review (High)**: 프로젝트 전역 규칙 및 보안, 엣지 케이스, 동시성 이슈 심층 검증
 * **5. Commit & Task Clean-up (Low)**: `git diff` 분석, 커밋 메시지 작성 및 완료 태스크 정리 (가장 가볍고 빠른 처리)
 
+### **8. Agent Persistent Memory (agentmemory)**
+
+에이전트는 `agentmemory` MCP 서버를 통해 세션 간 유지되는 장기 지속성 메모리를 활용합니다. (주요 도구: `memory_recall`, `memory_smart_search`, `memory_save`, `memory_sessions`)
+
+* **컨텍스트 로드**: 새로운 작업이나 세션 시작 시, 과거 결정 사항, 트러블슈팅 이력 및 사용자 선호도를 확인하기 위해 `memory_recall` 또는 `memory_smart_search`를 활용합니다.
+* **영구 지식 보존**: 중요한 아키텍처 결정, 해결 패턴(Gotcha), 규칙 변경, 사용자 선호도가 확정되었을 때 `memory_save`를 통해 핵심 사실을 간결하게 저장합니다.
+* **재도출 최소화**: 이미 학습된 지식을 재도출하지 않고 메모리를 우선 참조하며, 전체 대화록 대신 재사용 가능한 팩트 단위로 관리합니다.
+
 ## **A. Environment Detection Criteria**
 
 **macOS Native Mode (Primary):**
