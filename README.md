@@ -27,7 +27,11 @@ dotfiles/
 │   └── chrome-profiles     # Google Chrome 프로필 조회 및 실행 도구
 ├── docs/                   # 기능별 상세 가이드
 │   ├── touch-id.md         # macOS 터미널 Touch ID sudo 연동 가이드
-│   └── agy-switch-guide.md # Antigravity CLI 멀티 계정 스위칭 가이드
+│   ├── agy-switch-guide.md # Antigravity CLI 멀티 계정 스위칭 가이드
+│   ├── subagent-usage-guide.md    # 하위 에이전트 사용 원칙 및 9개 스킬 기본 동작 가이드
+│   ├── development-workflow.md    # 개발 환경(비밀값·DB·Git훅·배포·보안) 작업 흐름
+│   ├── subagent-token-cost.md     # 하위 에이전트 토큰 비용 분석 및 절약 팁
+│   └── testing-strategy.md        # 초경량 3계층 자동화 테스트 전략 평가 보고서
 ├── git/
 │   ├── .gitconfig          # 크로스 플랫폼 includeIf 다중 계정 분기
 │   ├── .gitconfig-personal # 개인 계정 (yxxh020)
@@ -170,6 +174,7 @@ Gemini, Antigravity, Claude Code 등 AI 코딩 어시스턴트에서 전역으�
 | `qa-e2e-optimization` | Playwright E2E 속도 최적화 및 오버레이 가림 방지 |
 | `ralph-loop` | 빌드/테스트 실패 시 성공(Green)할 때까지 가설-수정 자율 루프 |
 | `invite-tester` | 개발자 에이전트와 비판적 QA 에이전트 간 2인 교차 검증 루프 |
+| `design-qa-inspector` | 적대적 디자인/QA 검수자 — 실제 DOM·스크린샷 기반 라이트/다크모드·z-index·반응형 검증 |
 | `provide-test-for-human` | 사용자가 직접 브라우저에서 검증할 수 있는 테스트 데이터셋 표 제공 |
 | `rubric-generator` / `ai-grader` | 객관적 과제 채점 루브릭 생성 및 CoT 추론 기반 자동 채점 |
 

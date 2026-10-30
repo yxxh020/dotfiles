@@ -109,11 +109,12 @@ dotfiles/
 | `merge-worktree` | 워크트리 커밋 → 머지 → 삭제 3단계 마무리 워크플로우 |
 | `bug-report-sync-expert` | 버그 제보(bug_reports) 환경별 동기화 및 프론트 캡처 모달 검증/수정 스킬 |
 | `bug-fix-workflow` | 버그 트리아지 → GitHub 이슈 연동 → 패치 버전 bump 및 완료 처리 전주기 워크플로우 |
+| `design-qa-inspector` | 적대적 디자인/QA 검수자 — DOM·스크린샷 기반 라이트/다크모드·z-index·반응형 검증 |
 
 #### 2) 확장 스킬 라이브러리 카테고리 (총 160개 스킬)
 * **프론트엔드 & UI/UX**: `frontend-design`, `canvas-design`, `dark-mode-expert`, `sticky-table-header`, `flexible-modal-expert`, `pill-toggle-filter-expert`, `pagination-expert`, `ctrl-click-multi-select-expert`, `url-state-sync-expert`, `ui-shortcut-expert` 등
 * **백엔드 & 데이터베이스**: `db-migrate`, `sql-query-expert`, `add-dbeaver-connection`, `nextjs-prisma-expert`, `nestjs-expert`, `supabase-keep-alive`, `prisma-docker-deploy-expert` 등
-* **테스트 & 품질 보증(QA)**: `test-driven-development`, `webapp-testing`, `qa-automation-expert`, `qa-e2e-optimization`, `playwright-safe-setup`, `playwright-user-data-dir` 등
+* **테스트 & 품질 보증(QA)**: `test-driven-development`, `webapp-testing`, `qa-automation-expert`, `qa-e2e-optimization`, `playwright-safe-setup`, `playwright-user-data-dir`, `design-qa-inspector` 등
 * **문서 & 오피스 처리**: `docx`, `pptx`, `xlsx`, `pdf`, `doc2md`, `create-markdown`, `html-render-expert`, `use-mermaid` 등
 * **AI 개발 & 메타 에이전트**: `subagent-driven-development`, `systematic-debugging`, `executing-plans`, `writing-plans`, `dispatching-parallel-agents`, `agentmemory-*`, `ralph-loop` 등
 * **인프라 & 배포**: `cloudflare-deploy`, `vercel-branch-deploy`, `disk-cleaner`, `disk-analyzer`, `system-doctor`, `git-hooks-setup`, `using-git-worktrees` 등
