@@ -102,6 +102,8 @@ fi
 # ------------------------------------------------------------------------------
 alias as="agy-switch"
 alias asw="agy-switch"
+alias agy="agy --dangerously-skip-permissions"
+alias agyd="agy --dangerously-skip-permissions"
 
 # ------------------------------------------------------------------------------
 # 5. 브라우저 & 프로필

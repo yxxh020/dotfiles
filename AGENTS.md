@@ -27,7 +27,8 @@ dotfiles/
 ├── install.ps1             # Windows 자동 구성 스크립트
 ├── bin/                    # ~/.local/bin 심볼릭 링크 CLI 바이너리
 │   ├── agy-switch          # Antigravity CLI 계정 스위처 (`as`)
-│   └── chrome-profiles     # Google Chrome 프로필 런처 (`chro`, `chls`)
+│   ├── chrome-profiles     # Google Chrome 프로필 런처 (`chro`, `chls`)
+│   └── jev                 # TypeSafe/OpenRouter 고속 의사결정 모델 CLI 클라이언트
 ├── docs/                   # 기능별 영구 기술 매뉴얼
 ├── git/                    # Git 다중 계정 분기 설정
 │   ├── .gitconfig          # includeIf 기반 조건부 분기 메인 설정
@@ -81,6 +82,7 @@ dotfiles/
 ### 5.3 [Module] CLI 바이너리 도구 (`bin/`)
 * **`bin/agy-switch` (`as`)**: Antigravity CLI의 개인/회사 인증 토큰 및 설정을 즉시 스위칭.
 * **`bin/chrome-profiles` (`chro`, `chls`)**: 등록된 Google Chrome 사용자 프로필을 독립된 창으로 즉시 실행.
+* **`bin/jev` (`jev`)**: TypeSafe 또는 OpenRouter 기반 초고속 "System One" 자동 판정 및 셸 스크립트 라우팅 도구. (설정 가이드: `docs/windscribe-vpn-guide.md`)
 
 ### 5.4 [Module] KeePassXC 3-Way 동기화 엔진 (`tasks/keepass-gdrive-sync/`)
 * **목표**: 로컬 금고, Google Drive 클라우드 금고, 백업 금고 간 3-Way 비교 및 충돌 없는 동기화 보장.

@@ -1,0 +1,395 @@
+#!/usr/bin/env python3
+"""
+Jev CLI - TypeSafe AI "System One" decision model client.
+Designed for shell scripting, routing, and fast automated decisions.
+"""
+import sys
+import os
+import json
+import argparse
+import subprocess
+import urllib.request
+import urllib.error
+DEFAULT_MODEL = "jev-latest"
+OPENROUTER_MODEL = os.getenv("JEV_MODEL", "nvidia/nemotron-3.5-super-vl:free")
+def get_api_credentials():
+    # 1. Check for TypeSafe official key
+    key = os.getenv("TYPESAFE_API_KEY")
+    if key and key.strip():
+        return "typesafe", key.strip(), "https://api.typesafe.ai/v1/systemone", DEFAULT_MODEL
+    # 2. Check for OpenRouter key
+    openrouter_key = os.getenv("OPENROUTER_API_KEY")
+    if openrouter_key and openrouter_key.strip():
+        return "openrouter", openrouter_key.strip(), "https://openrouter.ai/api/v1/chat/completions", OPENROUTER_MODEL
+    # 3. Keyring / KeePassXC lookup via secret-tool (Linux) or security (macOS)
+    titles_to_try = [
+        ("typesafe", "https://api.typesafe.ai/v1/systemone", DEFAULT_MODEL),
+        ("TypeSafe", "https://api.typesafe.ai/v1/systemone", DEFAULT_MODEL),
+        ("openrouter", "https://openrouter.ai/api/v1/chat/completions", OPENROUTER_MODEL),
+        ("OpenRouter", "https://openrouter.ai/api/v1/chat/completions", OPENROUTER_MODEL),
+        ("typesafe.env", "https://api.typesafe.ai/v1/systemone", DEFAULT_MODEL)
+    ]
+    # 3-A. Linux secret-tool (KeePassXC Secret Service)
+    for title, endpoint, default_m in titles_to_try:
+        try:
+            res = subprocess.run(
+                ["secret-tool", "lookup", "Title", title],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True,
+                timeout=2
+            )
+            val = res.stdout.strip()
+            if val:
+                for line in val.splitlines():
+                    if "API_KEY=" in line:
+                        return title, line.split("=", 1)[1].strip().strip('"\''), endpoint, default_m
+                if not any(k in val for k in ["=", "\n"]):
+                    return title, val, endpoint, default_m
+                return title, val, endpoint, default_m
+        except Exception:
+            pass
+
+    # 3-B. macOS: KeePassXC via keepassxc-cli (using master password in Keychain) or native Keychain
+    if sys.platform == "darwin":
+        # 3-B-1. Try KeePassXC CLI with master password stored in macOS Keychain
+        kdbx_candidates = [
+            os.getenv("KEEBOX_LOCAL_DB"),
+            os.path.expanduser("~/dotfiles/login.kdbx"),
+            os.path.expanduser("~/Downloads/login.kdbx")
+        ]
+        kdbx_path = next((p for p in kdbx_candidates if p and os.path.isfile(p)), None)
+
+        if kdbx_path:
+            master_pw = None
+            for account, service in [("keepassxc-master", "law-lin-secrets"), ("keepassxc-master", "keepassxc")]:
+                try:
+                    res = subprocess.run(
+                        ["security", "find-generic-password", "-a", account, "-s", service, "-w"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.DEVNULL,
+                        text=True,
+                        timeout=2
+                    )
+                    if res.stdout.strip():
+                        master_pw = res.stdout.strip()
+                        break
+                except Exception:
+                    pass
+
+            if master_pw:
+                for title, endpoint, default_m in titles_to_try:
+                    try:
+                        res = subprocess.run(
+                            ["keepassxc-cli", "show", "-q", "-s", "-a", "Password", kdbx_path, title],
+                            input=master_pw + "\n",
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.DEVNULL,
+                            text=True,
+                            timeout=3
+                        )
+                        val = res.stdout.strip()
+                        if val:
+                            for line in val.splitlines():
+                                if "API_KEY=" in line:
+                                    return title.lower(), line.split("=", 1)[1].strip().strip('"\''), endpoint, default_m
+                            if not any(k in val for k in ["=", "\n"]):
+                                return title.lower(), val, endpoint, default_m
+                            return title.lower(), val, endpoint, default_m
+                    except Exception:
+                        pass
+
+        # 3-B-2. Fallback to direct macOS Keychain item
+        for title, endpoint, default_m in titles_to_try:
+            try:
+                res = subprocess.run(
+                    ["security", "find-generic-password", "-s", title, "-w"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.DEVNULL,
+                    text=True,
+                    timeout=2
+                )
+                val = res.stdout.strip()
+                if val:
+                    for line in val.splitlines():
+                        if "API_KEY=" in line:
+                            return title.lower(), line.split("=", 1)[1].strip().strip('"\''), endpoint, default_m
+                    if not any(k in val for k in ["=", "\n"]):
+                        return title.lower(), val, endpoint, default_m
+                    return title.lower(), val, endpoint, default_m
+            except Exception:
+                pass
+    return None, None, None, None
+def call_jev(state: str, questions: dict, model: str = None, api_key: str = None):
+    provider, resolved_key, endpoint, default_model = get_api_credentials()
+    
+    if api_key:
+        resolved_key = api_key
+        endpoint = "https://api.typesafe.ai/v1/systemone"
+        default_model = DEFAULT_MODEL
+    if not resolved_key:
+        sys.stderr.write(
+            "Error: API Key not found (Neither TypeSafe nor OpenRouter).\n"
+            "Options to configure:\n"
+            "  1) Environment Variable (Universal):\n"
+            "     export OPENROUTER_API_KEY='sk-or-v1-...'\n"
+            "  2) macOS Keychain (Recommended for Mac):\n"
+            "     security add-generic-password -a \"$USER\" -s 'openrouter' -w\n"
+            "  3) Linux Keyring / KeePassXC (Recommended for Linux):\n"
+            "     secret-tool store --label='OpenRouter' Title 'openrouter'\n"
+        )
+        sys.exit(1)
+    chosen_model = model if model else default_model
+    # Build provider-specific payload
+    if provider in ("openrouter", "OpenRouter"):
+        # OpenRouter uses chat completions API — convert Jev state+questions
+        # into a system/user message pair with structured output request
+        system_prompt = "You are a structured decision engine. Respond ONLY with valid JSON matching the requested schema. No extra text."
+        user_parts = [f"State: {state}", "", "Questions:"]
+        response_schema_props = {}
+        required_fields = []
+        for q_id, q_spec in questions.items():
+            q_type = q_spec.get("type")
+            instructions = q_spec.get("instructions", "")
+            if q_type == "choice":
+                criteria = q_spec.get("criteria", {})
+                options = list(criteria.keys())
+                user_parts.append(f"- {q_id} (choice): {instructions} Options: {', '.join(options)}")
+                response_schema_props[q_id] = {
+                    "type": "object",
+                    "properties": {
+                        "type": {"type": "string", "enum": ["choice"]},
+                        "choice": {"type": "string", "enum": options},
+                        "confidence": {"type": "number"},
+                        "probabilities": {
+                            "type": "object",
+                            "properties": {k: {"type": "number"} for k in options},
+                        }
+                    },
+                    "required": ["type", "choice", "confidence", "probabilities"]
+                }
+            elif q_type == "noul":
+                user_parts.append(f"- {q_id}: Answer the question with a probability between 0.0 (No) and 1.0 (Yes). Question: {instructions}")
+                response_schema_props[q_id] = {
+                    "type": "object",
+                    "properties": {
+                        "type": {"type": "string", "enum": ["noul"]},
+                        "noul": {
+                            "type": "number",
+                            "description": "Probability that the answer to the question is YES (1.0 for Yes, 0.0 for No)"
+                        }
+                    },
+                    "required": ["type", "noul"]
+                }
+            elif q_type == "score":
+                user_parts.append(f"- {q_id} (score 0.0-1.0): {instructions}")
+                response_schema_props[q_id] = {
+                    "type": "object",
+                    "properties": {
+                        "type": {"type": "string", "enum": ["score"]},
+                        "score": {"type": "number"},
+                        "confidence": {"type": "number"}
+                    },
+                    "required": ["type", "score", "confidence"]
+                }
+            required_fields.append(q_id)
+        payload = {
+            "model": chosen_model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "\n".join(user_parts)}
+            ],
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "jev_decision",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": response_schema_props,
+                        "required": required_fields,
+                        "additionalProperties": False
+                    }
+                }
+            }
+        }
+    else:
+        # TypeSafe native endpoint
+        payload = {
+            "model": chosen_model,
+            "state": state,
+            "questions": questions
+        }
+    headers = {
+        "Authorization": f"Bearer {resolved_key}",
+        "Content-Type": "application/json",
+        "User-Agent": "dotfiles-jev-cli/1.0"
+    }
+    if provider in ("openrouter", "OpenRouter"):
+        headers["HTTP-Referer"] = "https://github.com/dotfiles"
+        headers["X-Title"] = "Dotfiles Jev CLI"
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers=headers,
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = resp.read().decode("utf-8")
+            result = json.loads(data)
+            # OpenRouter returns chat completion format — extract JSON from message content
+            if provider in ("openrouter", "OpenRouter"):
+                content = result.get("choices", [{}])[0].get("message", {}).get("content", "{}")
+                return json.loads(content)
+            return result
+    except urllib.error.HTTPError as e:
+        err_msg = e.read().decode("utf-8", errors="replace")
+        sys.stderr.write(f"HTTP Error {e.code}: {e.reason}\n{err_msg}\n")
+        sys.exit(2)
+    except urllib.error.URLError as e:
+        sys.stderr.write(f"Network Error: {e.reason}\n")
+        sys.exit(3)
+    except Exception as e:
+        sys.stderr.write(f"Unexpected Error: {e}\n")
+        sys.exit(4)
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="TypeSafe Jev CLI - High-speed System One decision engine for shell scripts"
+    )
+    parser.add_argument(
+        "text",
+        nargs="?",
+        default=None,
+        help="Input text to analyze (if omitted, reads from stdin)"
+    )
+    parser.add_argument(
+        "--choice",
+        "-c",
+        help="Comma-separated options to choose from (e.g., 'bug,feature,docs')"
+    )
+    parser.add_argument(
+        "--yesno",
+        "-y",
+        help="Question for Yes/No (noul) probability evaluation (e.g., 'Is this an urgent issue?')"
+    )
+    parser.add_argument(
+        "--score",
+        "-s",
+        help="Instruction for score evaluation (0.0 - 1.0)"
+    )
+    parser.add_argument(
+        "--instruction",
+        "-i",
+        default="Select the best matching category.",
+        help="Optional custom instruction for --choice"
+    )
+    parser.add_argument(
+        "--raw-questions",
+        help="Custom raw JSON string for the questions object"
+    )
+    parser.add_argument(
+        "--model",
+        default=None,
+        help="Model name (default: jev-latest for TypeSafe, typesafe/jev-latest for OpenRouter)"
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output full raw JSON response"
+    )
+    parser.add_argument(
+        "--quiet",
+        "-q",
+        action="store_true",
+        help="Output only the winning choice / boolean / score value (ideal for shell scripts)"
+    )
+    return parser.parse_args()
+def main():
+    args = parse_args()
+    # Read state text
+    if args.text:
+        state = args.text
+    elif not sys.stdin.isatty():
+        state = sys.stdin.read().strip()
+    else:
+        sys.stderr.write("Error: No input text provided via argument or stdin.\n")
+        sys.exit(1)
+    if not state:
+        sys.stderr.write("Error: Input text is empty.\n")
+        sys.exit(1)
+    # Build questions payload
+    questions = {}
+    if args.raw_questions:
+        try:
+            questions = json.loads(args.raw_questions)
+        except Exception as e:
+            sys.stderr.write(f"Invalid JSON for --raw-questions: {e}\n")
+            sys.exit(1)
+    elif args.choice:
+        options = [opt.strip() for opt in args.choice.split(",") if opt.strip()]
+        if len(options) < 2:
+            sys.stderr.write("Error: --choice requires at least 2 comma-separated options.\n")
+            sys.exit(1)
+        criteria = {opt: opt for opt in options}
+        questions["choice_result"] = {
+            "type": "choice",
+            "instructions": args.instruction,
+            "criteria": criteria
+        }
+    elif args.yesno:
+        questions["yesno_result"] = {
+            "type": "noul",
+            "instructions": args.yesno
+        }
+    elif args.score:
+        questions["score_result"] = {
+            "type": "score",
+            "instructions": args.score
+        }
+    else:
+        sys.stderr.write("Error: You must specify one of --choice, --yesno, --score, or --raw-questions.\n")
+        sys.exit(1)
+    result = call_jev(state, questions, model=args.model)
+    if args.json:
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+    # Process and print output
+    for q_id, q_data in result.items():
+        if isinstance(q_data, str):
+            if args.quiet:
+                print(q_data)
+            else:
+                print(f"[{q_id}] {q_data}")
+            continue
+        if not isinstance(q_data, dict):
+            print(str(q_data))
+            continue
+        q_type = q_data.get("type")
+        if q_type == "choice":
+            choice = q_data.get("choice")
+            conf = q_data.get("confidence", 0.0)
+            if args.quiet:
+                print(choice)
+            else:
+                probs = q_data.get("probabilities", {})
+                probs_str = ", ".join([f"{k}: {v:.2f}" for k, v in probs.items()])
+                print(f"[Choice] {choice} (Confidence: {conf*100:.1f}%) | Details: {probs_str}")
+        elif q_type == "noul":
+            prob = q_data.get("noul", 0.0)
+            is_true = prob >= 0.5
+            if args.quiet:
+                print("true" if is_true else "false")
+            else:
+                print(f"[Yes/No] {'YES' if is_true else 'NO'} (Probability: {prob*100:.1f}%)")
+        elif q_type == "score":
+            score = q_data.get("score", 0.0)
+            conf = q_data.get("confidence", 0.0)
+            if args.quiet:
+                print(f"{score:.4f}")
+            else:
+                print(f"[Score] {score:.4f} (Confidence: {conf*100:.1f}%)")
+        else:
+            print(json.dumps(q_data, ensure_ascii=False))
+if __name__ == "__main__":
+    main()

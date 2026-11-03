@@ -24,14 +24,16 @@ dotfiles/
 ├── AGENTS.md               # 요구사항 정의서(PRD) 및 AI 에이전트 지침 (단일 진실 공급원)
 ├── bin/                    # 공용 커스텀 CLI 바이너리 (~/.local/bin 링크)
 │   ├── agy-switch          # Antigravity CLI 계정 스위처 (as p / as o)
-│   └── chrome-profiles     # Google Chrome 프로필 조회 및 실행 도구
+│   ├── chrome-profiles     # Google Chrome 프로필 조회 및 실행 도구
+│   └── jev                 # TypeSafe / OpenRouter 고속 의사결정 CLI 클라이언트
 ├── docs/                   # 기능별 상세 가이드
 │   ├── touch-id.md         # macOS 터미널 Touch ID sudo 연동 가이드
 │   ├── agy-switch-guide.md # Antigravity CLI 멀티 계정 스위칭 가이드
 │   ├── subagent-usage-guide.md    # 하위 에이전트 사용 원칙 및 9개 스킬 기본 동작 가이드
 │   ├── development-workflow.md    # 개발 환경(비밀값·DB·Git훅·배포·보안) 작업 흐름
 │   ├── subagent-token-cost.md     # 하위 에이전트 토큰 비용 분석 및 절약 팁
-│   └── testing-strategy.md        # 초경량 3계층 자동화 테스트 전략 평가 보고서
+│   ├── testing-strategy.md        # 초경량 3계층 자동화 테스트 전략 평가 보고서
+│   └── windscribe-vpn-guide.md    # Windscribe VPN CLI 설치 및 Jev 연동 가이드
 ├── git/
 │   ├── .gitconfig          # 크로스 플랫폼 includeIf 다중 계정 분기
 │   ├── .gitconfig-personal # 개인 계정 (yxxh020)
@@ -103,6 +105,12 @@ cd $HOME\dotfiles
 4. **Chrome 멀티 프로필 브라우저 실행 (`chro`, `chls`)**:
    - `chls` : 등록된 Chrome 프로필 목록 조회
    - `chro 0` / `chro 1` : 번호별 Chrome 프로필 창 즉시 실행
+
+5. **TypeSafe / OpenRouter 고속 의사결정 도구 (`jev`)**:
+   - `jev "텍스트" -c "A,B,C"` : 다지선다 분류
+   - `jev "텍스트" -y "질문"` : Yes/No 확률 판정
+   - `jev "텍스트" -c "A,B,C" -q` : 스크립트 파이프라인용 단일 결과 출력
+   - 상세 매뉴얼: [`docs/windscribe-vpn-guide.md`](docs/windscribe-vpn-guide.md)
 
 ---
 
