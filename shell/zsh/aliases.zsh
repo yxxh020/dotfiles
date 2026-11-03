@@ -41,6 +41,18 @@ if command -v bat &>/dev/null; then
   alias cat="bat"
 fi
 
+# fzf 미리보기로 파일 선택
+alias fp="fd -t f | fzf --preview 'bat --color=always {}'"
+
+# Neovim & lazygit
+if command -v nvim &>/dev/null; then
+  alias vi="nvim"
+  alias vim="nvim"
+  alias nv="nvim"
+  alias vimdiff="nvim -d"
+fi
+alias lg="lazygit"
+
 # ------------------------------------------------------------------------------
 # 2. Git Aliases (Oh My Zsh 호환)
 # ------------------------------------------------------------------------------
@@ -132,6 +144,9 @@ fi
 # 8. Tmux 멀티플렉서 (tmux manual 2309)
 # ------------------------------------------------------------------------------
 alias tmls='tmux ls'
+alias tm="tmux new -A -s main"   # main 세션에 붙거나 없으면 생성
+alias tma="tmux attach -t"
+alias tmk="tmux kill-session -t"
 alias tmrs='tmux attach-session'
 alias tmpg='tmux attach-session -t pgsql'
 alias tmdl='tmux attach-session -t dlight'
